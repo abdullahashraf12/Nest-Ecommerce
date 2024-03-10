@@ -1,10 +1,9 @@
 from django.shortcuts import render, redirect
 from userauths.forms import UserRegisterForms
 from django.contrib import messages
-from django.contrib.auth import login, authenticate
-from django.http import HttpResponse  # Import HttpResponse
+from django.contrib.auth import login, authenticate , logout
 from django.conf import settings
-from django.contrib.auth import logout 
+
 User = settings.AUTH_USER_MODEL
 def register_user(request):
     if request.method == "POST":
@@ -25,6 +24,7 @@ def register_user(request):
         form = UserRegisterForms()
 
     context = {"form": form}
+    
     return render(request, "customer_front_end_ltr/userauth/sign-up.html", context=context)
 def login_view(request):
     if request.user.is_authenticated:
@@ -49,6 +49,6 @@ def login_view(request):
     }
     return render(request,"customer_front_end_ltr/userauth/sign-in.html", context=context)
 def logout_view(request):
-    logout(request=request)
-    messages.warning(request=request,message="User Logout")
+    logout(request)
+    messages.warning(request,message="User Logout")
     return redirect("userauths:sign-in")
