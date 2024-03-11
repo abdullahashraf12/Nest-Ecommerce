@@ -75,7 +75,8 @@ class Products(models.Model):
     image = models.ImageField(upload_to=user_directory_path,default="product.jpg")
     description = models.TextField(null=True,blank=True)
     user=models.ForeignKey(User,on_delete=models.SET_NULL,null=True)
-    category = models.ForeignKey(Category,on_delete=models.SET_NULL,null=True)
+    category = models.ForeignKey(Category,on_delete=models.SET_NULL,null=True,related_name="category")
+    vendor = models.ForeignKey(Vendor,on_delete=models.SET_NULL,null=True,related_name = "product")
     price = models.DecimalField(max_digits=9999999999999,decimal_places = 2,default="1.99")
     old_Price = models.DecimalField(max_digits=9999999999999,decimal_places = 2,default="2.99")
     spescification = models.TextField(null=True,blank=True)
@@ -100,7 +101,7 @@ class Products(models.Model):
         return new_price
 class ProductImages(models.Model):
     images = models.ImageField(upload_to="product-images",default="product.jpg")
-    product = models.ForeignKey(Products,on_delete=models.SET_NULL,null=True)
+    product = models.ForeignKey(Products,on_delete=models.SET_NULL,null=True,related_name="p_images")
     date=models.DateTimeField(auto_now_add=True)
     class Meta:
         verbose_name_plural = "Products images"
