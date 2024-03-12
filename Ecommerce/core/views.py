@@ -46,3 +46,11 @@ def vendor_details_view(request,vid):
         "products":products
     }
     return render(request=request,template_name="customer_front_end_ltr/vendor-details-2.html",context=context)
+def get_product_by_id(request,pid):
+    product=Products.objects.get(pid=pid)
+    p_images = product.p_images.all()
+    context = {
+        "product":product,
+        "p_images":p_images
+    }
+    return render(request,template_name="customer_front_end_ltr/shop-product-vendor.html",context=context)

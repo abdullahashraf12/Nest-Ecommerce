@@ -17,6 +17,29 @@
     <!-- Template CSS -->
     <link rel="stylesheet" href="{% static 'assets/css/plugins/animate.min.css' %}" />
     <link rel="stylesheet" href="{% static 'assets/css/main.css' %}" />
+    <style>
+        /* Add some CSS styles to style the layout */
+        .my_ul{
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex; /* Use flexbox for layout */
+            flex-wrap: wrap; /* Allow items to wrap to the next line */
+        }
+
+        .my_li {
+            flex: 1; /* Equal flex distribution for each item */
+            margin: 5px; /* Adjust the margin as needed */
+            width: 48%; /* Set a specific width to ensure two columns */
+        }
+
+        /* Add a class for the fifth and sixth items to control their appearance */
+        .fifth-item,
+        .sixth-item {
+            width: 100%; /* Set full width for the fifth and sixth items */
+            margin-top: 10px; /* Adjust the margin as needed */
+        }
+    </style>
 </head>
 
 <body>
@@ -253,37 +276,64 @@
                             </a>
                             <div class="categories-dropdown-wrap categories-dropdown-active-large font-heading">
                                 <div class="d-flex categori-dropdown-inner">
-                                    <ul>
-                                        {% for i in categories%}
-
-                                    <li>
-                                        <a href="{% url 'core:category_product_list' i.cid %}"> <img src="{{i.image.url}}" alt="" />{{i.title}}</a>
-                                    </li>
-
-                                    {% endfor %}
-                                    </ul>
-                                    <ul class="end">
                                 
+
+
+
+
+
+
+
+
+
+
+  
+                                    <ul class="my_ul">
+                                        {% for category in categories|slice:":6" %}
+                                            <li class="my_li {% if forloop.last or forloop.revcounter <= 2 %}{% if forloop.last %}fifth-item{% elif forloop.revcounter == 2 %}sixth-item{% endif %}{% endif %}">
+                                                <a href="{% url 'core:category_product_list' category.cid %}">
+                                                    <img src="{{ category.image.url }}" alt="" />{{ category.title }}
+                                                </a>
+                                            </li>
+                                        {% endfor %}
                                     </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                                 </div>
                                 <div class="more_slide_open" style="display: none">
                                     <div class="d-flex categori-dropdown-inner">
-                                        <ul>
-                                            <li>
-                                                <a href="shop-grid-right.html"> <img src="{% static 'assets/imgs/theme/icons/icon-1.svg' %}" alt="" />Milks and Dairies</a>
+                                      
+
+                                    <ul class="my_ul">
+                                        {% for category in categories|slice:":" %}
+                                            <li class="my_li {% if forloop.last or forloop.revcounter <= 2 %}{% if forloop.last %}fifth-item{% elif forloop.revcounter == 2 %}sixth-item{% endif %}{% endif %}">
+                                                <a href="{% url 'core:category_product_list' category.cid %}">
+                                                    <img src="{{ category.image.url }}" alt="" />{{ category.title }}
+                                                </a>
                                             </li>
-                                            <li>
-                                                <a href="shop-grid-right.html"> <img src="{% static 'assets/imgs/theme/icons/icon-2.svg' %}" alt="" />Clothing & beauty</a>
-                                            </li>
-                                        </ul>
-                                        <ul class="end">
-                                            <li>
-                                                <a href="shop-grid-right.html"> <img src="{% static 'assets/imgs/theme/icons/icon-3.svg' %}" alt="" />Wines & Drinks</a>
-                                            </li>
-                                            <li>
-                                                <a href="shop-grid-right.html"> <img src="{% static 'assets/imgs/theme/icons/icon-4.svg' %}" alt="" />Fresh Seafood</a>
-                                            </li>
-                                        </ul>
+                                        {% endfor %}
+                                    </ul>
+
+
                                     </div>
                                 </div>
                                 <div class="more_categories"><span class="icon"></span> <span class="heading-sm-1">Show more...</span></div>
@@ -314,6 +364,8 @@
                                             <li><a href="{% url 'core:category_product_list' i.cid %}">{{i.title}}</a>
                                             </li>
                                             {% endfor %}
+                                            <li><a href="{% url 'core:category_list' %}">Show All Categories</a></li>
+
                                             <!-- <li><a href="shop-grid-right.html">Shop Grid – Right Sidebar</a></li>
                                             <li><a href="shop-grid-left.html">Shop Grid – Left Sidebar</a></li>
                                             <li><a href="shop-list-right.html">Shop List – Right Sidebar</a></li>
@@ -349,12 +401,17 @@
                                     <li>
                                         <a href="#">Vendors <i class="fi-rs-angle-down"></i></a>
                                         <ul class="sub-menu">
-                                            <li><a href="vendors-grid.html">Vendors Grid</a></li>
-                                            <li><a href="vendors-list.html">Vendors List</a></li>
+                                           {% for i in vendors %}
+                                           <li><a href="{% url 'core:selected_vendor' i.vid %}">{{i.title}}</a></li>
+                                           
+                                            {% endfor %}
+                                            <li><a href="{% url 'core:show_vendor_list' %}">Show All Vendors</a></li>
+
+                                            <!-- <li><a href="vendors-list.html">Vendors List</a></li>
                                             <li><a href="vendor-details-1.html">Vendor Details 01</a></li>
                                             <li><a href="vendor-details-2.html">Vendor Details 02</a></li>
                                             <li><a href="vendor-dashboard.html">Vendor Dashboard</a></li>
-                                            <li><a href="vendor-guide.html">Vendor Guide</a></li>
+                                            <li><a href="vendor-guide.html">Vendor Guide</a></li> -->
                                         </ul>
                                     </li>
                                     <li class="position-static">
@@ -529,18 +586,6 @@
     </header>
  
     {% block content %}
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -781,7 +826,7 @@
     <script src="{% static 'assets/js/plugins/scrollup.js' %}"></script>
     <script src="{% static 'assets/js/plugins/jquery.vticker-min.js' %}"></script>
     <script src="{% static 'assets/js/plugins/jquery.theia.sticky.js' %}"></script>
-    <script src="{% static 'assets/js/plugins/jquery.elevatezoom.js' %}"></script> -->
+    <script src="{% static 'assets/js/plugins/jquery.elevatezoom.js' %}"></script>
     <!-- Template  JS -->
     <script src="{% static 'assets/js/main.js' %}"></script>
     <script src="{% static 'assets/js/shop.js' %}"></script>
