@@ -340,7 +340,7 @@
                                     <li>
                                         <a href="{% url 'core:category_list' %}">Categories <i class="fi-rs-angle-down"></i></a>
                                         <ul class="sub-menu">
-                                            {% for i in categories %}
+                                            {% for i in categories|slice:":5" %}
                                             <li><a href="{% url 'core:category_product_list' i.cid %}">{{i.title}}</a>
                                             </li>
                                             {% endfor %}
@@ -381,7 +381,7 @@
                                     <li>
                                         <a href="{% url 'core:show_vendor_list' %}">Vendors <i class="fi-rs-angle-down"></i></a>
                                         <ul class="sub-menu">
-                                           {% for i in vendors %}
+                                           {% for i in vendors|slice:":5" %}
                                            <li><a href="{% url 'core:selected_vendor' i.vid %}">{{i.title}}</a></li>
                                            
                                             {% endfor %}
