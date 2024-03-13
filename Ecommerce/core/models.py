@@ -66,13 +66,17 @@ class Vendor(models.Model):
     def __str__(self):
         return str(self.title)
 class Tags(models.Model):
-    pass
+    tid =ShortUUIDField(unique=True,length=10,max_length= 20,alphabet="abcdefgh12345")
+    title = models.CharField(max_length = 100,default="Fresh Pear")
+
+    # pass
 
 
 class Products(models.Model):
     pid =ShortUUIDField(unique=True,length=10,max_length= 20,alphabet="abcdefgh12345")
     title = models.CharField(max_length = 100,default="Fresh Pear")
     image = models.ImageField(upload_to=user_directory_path,default="product.jpg")
+    back_image = models.ImageField(upload_to=user_directory_path,default="product.jpg")
     description = models.TextField(null=True,blank=True)
     user=models.ForeignKey(User,on_delete=models.SET_NULL,null=True)
     category = models.ForeignKey(Category,on_delete=models.SET_NULL,null=True,related_name="category")
@@ -80,7 +84,7 @@ class Products(models.Model):
     price = models.DecimalField(max_digits=9999999999999,decimal_places = 2,default="1.99")
     old_Price = models.DecimalField(max_digits=9999999999999,decimal_places = 2,default="2.99")
     spescification = models.TextField(null=True,blank=True)
-    # tags=models.ForeignKey(Tags,on_delete=models.SET_NULL,null=True)
+    tags=models.ForeignKey(Tags,on_delete=models.SET_NULL,null=True,related_name="tags")
     products_status = models.CharField(choices=STATUS,max_length=30,default="in_review")
     status=models.BooleanField(default=True)
     in_stock=models.BooleanField(default=True)
