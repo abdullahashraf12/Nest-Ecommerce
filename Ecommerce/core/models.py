@@ -66,9 +66,12 @@ class Vendor(models.Model):
     def __str__(self):
         return str(self.title)
 class Tags(models.Model):
-    tid =ShortUUIDField(unique=True,length=10,max_length= 20,alphabet="abcdefgh12345")
+    tid =ShortUUIDField(unique=True,length=10,max_length= 20,prefix="tid",alphabet="abcdefgh12345")
     title = models.CharField(max_length = 100,default="Fresh Pear")
-
+    class Meta:
+        verbose_name_plural = "Tags"
+    def __str__(self):
+        return str(self.title)
     # pass
 
 
