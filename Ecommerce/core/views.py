@@ -5,8 +5,9 @@ from core.models import Products,Category,Vendor,CardOrder,CardOrderItems,Produc
 def index(request):
     # bananas = Products.objects.all().order_by("-id")
     bananas = Products.objects.filter(products_status="published",featured=True).order_by("-id")
+
     context = {
-        "products":bananas
+        "products":bananas,
     }
     return render(request,template_name="customer_front_end_ltr/index.html",context=context)
 def product_list(request):

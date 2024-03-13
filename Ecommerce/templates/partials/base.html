@@ -12,11 +12,15 @@
     <meta property="og:type" content="" />
     <meta property="og:url" content="" />
     <meta property="og:image" content="" />
+    <link rel="stylesheet" href="{% static 'assets/css/plugins/jquery-ui.css' %}" />
+
     <!-- Favicon -->
     <link rel="shortcut icon" type="image/x-icon" href="{% static 'assets/imgs/theme/favicon.svg' %}" />
     <!-- Template CSS -->
     <link rel="stylesheet" href="{% static 'assets/css/plugins/animate.min.css' %}" />
     <link rel="stylesheet" href="{% static 'assets/css/main.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/price_range_style.css' %}"/>
+
     <style>
         /* Add some CSS styles to style the layout */
         .my_ul{
@@ -324,7 +328,7 @@
                                       
 
                                     <ul class="my_ul">
-                                        {% for category in categories|slice:":" %}
+                                        {% for category in categories|slice:"6:" %}
                                             <li class="my_li {% if forloop.last or forloop.revcounter <= 2 %}{% if forloop.last %}fifth-item{% elif forloop.revcounter == 2 %}sixth-item{% endif %}{% endif %}">
                                                 <a href="{% url 'core:category_product_list' category.cid %}">
                                                     <img src="{{ category.image.url }}" alt="" />{{ category.title }}
@@ -827,9 +831,13 @@
     <script src="{% static 'assets/js/plugins/jquery.vticker-min.js' %}"></script>
     <script src="{% static 'assets/js/plugins/jquery.theia.sticky.js' %}"></script>
     <script src="{% static 'assets/js/plugins/jquery.elevatezoom.js' %}"></script>
+    <script src="{% static 'assets/js/plugins/jquery-ui.js' %}"></script>
+
     <!-- Template  JS -->
     <script src="{% static 'assets/js/main.js' %}"></script>
     <script src="{% static 'assets/js/shop.js' %}"></script>
+    <script src="{% static 'assets/js/price_range_script.js' %}"></script>
+
 </body>
 
 </html>
