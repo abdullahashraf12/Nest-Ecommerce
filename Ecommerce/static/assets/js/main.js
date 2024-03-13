@@ -704,6 +704,13 @@
         $(this).toggleClass("show");
         $(".more_slide_open_m").slideToggle();
     });
+
+
+    $(".more_slide_open_mn").slideUp();
+    $(".more_categories_mn").on("click", function () {
+        $(this).toggleClass("show");
+        $(".more_slide_open_mn").slideToggle();
+    });
     /*-----More Menu Open----*/
     $(".more_slide_open").slideUp();
     $(".more_categories").on("click", function () {

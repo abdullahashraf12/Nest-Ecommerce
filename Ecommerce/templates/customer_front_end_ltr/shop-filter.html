@@ -76,13 +76,12 @@
                                         </div>
 
 
-<div style="height: 50px; width: 50px;"></div>
-                                        <div class="more_categories"><span class="icon"></span> <span class="heading-sm-1">Show more...</span></div>
-                                    </div>
                                         </div>
 
 
-
+                                        <div style="margin-top: 30px; height: 50px; width: 50px;"></div>
+                                        <div class="more_categories"><span class="icon"></span> <span class="heading-sm-1">Show more...</span></div>
+                                    </div>
 
 
 
@@ -92,54 +91,77 @@
                                 </div>
                             </div>
                             <div class="col-xl-3 col-lg-6 col-md-6 mb-lg-0 mb-md-2 mb-sm-2">
-                                <div class="card">
+                                <div class="card" style="width: 400px;">
                                     <h5 class="mb-30">By Vendors</h5>
                                     <div class="d-flex">
-                                        <div class="custome-checkbox mr-80">
-                                            <input class="form-check-input" type="checkbox" name="checkbox" id="exampleCheckbox1" value="" />
-                                            <label class="form-check-label" for="exampleCheckbox1"><span>Aldi</span></label>
-                                            <br />
-                                            <input class="form-check-input" type="checkbox" name="checkbox" id="exampleCheckbox2" value="" />
-                                            <label class="form-check-label" for="exampleCheckbox2"><span>Adidas</span></label>
-                                            <br />
-                                            <input class="form-check-input" type="checkbox" name="checkbox" id="exampleCheckbox3" value="" />
-                                            <label class="form-check-label" for="exampleCheckbox3"><span>Burbe</span></label>
-                                            <br />
-                                            <input class="form-check-input" type="checkbox" name="checkbox" id="exampleCheckbox4" value="" />
-                                            <label class="form-check-label" for="exampleCheckbox4"><span>Chanel</span></label>
-                                            <br />
-                                            <input class="form-check-input" type="checkbox" name="checkbox" id="exampleCheckbox5" value="" />
-                                            <label class="form-check-label" for="exampleCheckbox5"><span>Prada</span></label>
-                                            <br />
-                                            <input class="form-check-input" type="checkbox" name="checkbox" id="exampleCheckbox6" value="" />
-                                            <label class="form-check-label" for="exampleCheckbox6"><span>Kroger</span></label>
-                                            <br />
-                                            <input class="form-check-input" type="checkbox" name="checkbox" id="exampleCheckbox7" value="" />
-                                            <label class="form-check-label" for="exampleCheckbox7"><span>Traders</span></label>
-                                            <br />
-                                            <input class="form-check-input" type="checkbox" name="checkbox" id="exampleCheckbox8" value="" />
-                                            <label class="form-check-label" for="exampleCheckbox8"><span>Publix</span></label>
+                                        <div class="custome-checkbox mr-80" style="width: 200px;">
+                                            {% for v in vendors|slice:":3" %}
+                                            <div style="display: flex; align-items: center; margin-right: 20px;">
+                                                <input class="form-check-input" type="checkbox" name="checkbox" id="{{ v.vid }}" value="" width="10px" />
+                                                <img src="{{ v.image.url }}" alt="" width="50px" height="60px"/>
+                                                <label class="form-check-label" for="{{ category.id }}" style="margin-left: 10px;"><span>{{ v.title }}</span></label>  
+                                            </div>
+                                            {% endfor %}
                                         </div>
                                         <div class="custome-checkbox">
-                                            <input class="form-check-input" type="checkbox" name="checkbox" id="exampleCheckbox11" value="" />
-                                            <label class="form-check-label" for="exampleCheckbox11"><span>Harris</span></label>
-                                            <br />
-                                            <input class="form-check-input" type="checkbox" name="checkbox" id="exampleCheckbox21" value="" />
-                                            <label class="form-check-label" for="exampleCheckbox21"><span>Costco</span></label>
-                                            <br />
-                                            <input class="form-check-input" type="checkbox" name="checkbox" id="exampleCheckbox31" value="" />
-                                            <label class="form-check-label" for="exampleCheckbox31"><span>Targets</span></label>
-                                            <br />
-                                            <input class="form-check-input" type="checkbox" name="checkbox" id="exampleCheckbox41" value="" />
-                                            <label class="form-check-label" for="exampleCheckbox41"><span>Green Tea</span></label>
-                                            <br />
-                                            <input class="form-check-input" type="checkbox" name="checkbox" id="exampleCheckbox51" value="" />
-                                            <label class="form-check-label" for="exampleCheckbox51"><span>iSnack</span></label>
-                                            <br />
-                                            <input class="form-check-input" type="checkbox" name="checkbox" id="exampleCheckbox61" value="" />
-                                            <label class="form-check-label" for="exampleCheckbox61"><span>Pambox</span></label>
+                                          
+                                            <div class="d-flex categori-dropdown-inner">
+                                            
+                                                <div class="more_slide_open_mn" style="display: none">
+                                                    {% for v in vendors|slice:"3:6" %}
+                                                    <div style="display: flex; align-items: center; margin-right: 20px;">
+                                                        <input class="form-check-input" type="checkbox" name="checkbox" id="{{ v.vid }}" value="" width="10px" />
+                                                        <img src="{{ v.image.url }}" alt="" width="50px" height="60px"/>
+                                                        <label class="form-check-label" for="{{ v.vid }}" style="margin-left: 10px;"><span>{{ v.title }}</span></label>  
+                                                    </div>
+                                                    {% endfor %}
+                                                    <div class="d-flex categori-dropdown-inner">
+                                                      
+                
+                                                    <!-- <ul class="my_ul">
+                                                        {% for category in categories|slice:"6:" %}
+                                                            <li class="my_li {% if forloop.last or forloop.revcounter <= 2 %}{% if forloop.last %}fifth-item{% elif forloop.revcounter == 2 %}sixth-item{% endif %}{% endif %}">
+                                                                <a href="{% url 'core:category_product_list' category.cid %}">
+                                                                    <img src="{{ category.image.url }}" alt="" />{{ category.title }}
+                                                                </a>
+                                                            </li>
+                                                        {% endfor %}
+                                                    </ul>
+                 -->
+                
+                                                    </div>
+                                                </div>
+        
+        
+                                                </div>
+        
+        
+                                                <div style="margin-top: 30px; height: 50px; width: 50px;"></div>
+                                           
                                         </div>
+                                        
                                     </div>
+                                    <div style="margin-left: 20px; margin-top: 20px; width: 260px;">
+                                    
+                                    
+                                    
+                                    
+                                    
+                                        <div class="categories-dropdown-wrap">
+
+                                        <div class="more_categories_mn"><span class="icon"></span> <span class="heading-sm-1">Show more...</span></div>
+</div>
+
+
+
+
+
+
+
+
+
+
+                                </div>
                                 </div>
                             </div>
                             <div class="col-xl-3 col-lg-6 col-md-6 mb-lg-0 mb-md-2 mb-sm-2">
