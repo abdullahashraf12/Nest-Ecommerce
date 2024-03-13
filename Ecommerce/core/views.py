@@ -71,6 +71,7 @@ def get_products_name(request):
     print(categ_name)
     print(prod_name)
     bananas = Products.objects.all()
+    vendors=Vendor.objects.all()
     if(categ_name=="All Categories" or categ_name==""):
         bananas = Products.objects.filter(products_status="published",title__icontains=prod_name)
     else:
@@ -78,6 +79,7 @@ def get_products_name(request):
         print(bananas.count())
 
     context = {
-        "products":bananas
+        "products":bananas,
+        "vendors":vendors
     }
     return render(request,template_name="customer_front_end_ltr/shop-filter.html",context=context)
