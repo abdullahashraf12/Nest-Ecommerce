@@ -48,10 +48,36 @@ def vendor_details_view(request,vid):
     }
     return render(request=request,template_name="customer_front_end_ltr/vendor-details-2.html",context=context)
 def get_product_by_id(request,pid):
+    
     product=Products.objects.get(pid=pid)
     p_images = product.p_images.all()
+    related_products = Products.objects.filter(category=product.category)
+    vendor = product.vendor
+    category =Category.objects.all();
+    latest_products = Products.objects.filter(category=product.category).order_by('date')
     context = {
         "product":product,
-        "p_images":p_images
+        "p_images":p_images,
+        "related_products":related_products,
+        "vendor":vendor,
+        "category":category,
+        "latest_products":latest_products
     }
     return render(request,template_name="customer_front_end_ltr/shop-product-vendor.html",context=context)
+
+def get_products_name(request):
+    categ_name = request.GET.get('category_category')
+    prod_name = request.GET.get('search_name')
+    print(categ_name)
+    print(prod_name)
+    bananas = Products.objects.all()
+    if(categ_name=="All Categories" or categ_name==""):
+        bananas = Products.objects.filter(products_status="published",title__icontains=prod_name)
+    else:
+        bananas = Products.objects.filter(products_status="published",title__icontains=prod_name,category__cid=categ_name)
+        print(bananas.count())
+
+    context = {
+        "products":bananas
+    }
+    return render(request,template_name="customer_front_end_ltr/shop-filter.html",context=context)

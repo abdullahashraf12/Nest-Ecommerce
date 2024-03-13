@@ -26,21 +26,69 @@
                                 <div class="card">
                                     <h5 class="mb-30">By Categories</h5>
                                     <div class="categories-dropdown-wrap font-heading">
-                                        <ul>
-                                            <li>
-                                                <a href="shop-grid-right.html"> <img src="{% static 'assets/imgs/theme/icons/category-1.svg' %}" alt="" />Milks and Dairies</a>
-                                            </li>
-                                            <li>
-                                                <a href="shop-grid-right.html"> <img src="{% static 'assets/imgs/theme/icons/category-2.svg' %}" alt="" />Clothing &amp; beauty</a>
-                                            </li>
-                                            <li>
-                                                <a href="shop-grid-right.html"> <img src="{% static 'assets/imgs/theme/icons/category-3.svg' %}" alt="" />Pet Foods &amp; Toy</a>
-                                            </li>
-                                            <li class="mb-0">
-                                                <a href="shop-grid-right.html"> <img src="{% static 'assets/imgs/theme/icons/category-4.svg' %}" alt="" />Baking material</a>
-                                            </li>
+                                        {% for category in categories|slice:":3" %}
+                                        <div style="display: flex; align-items: center; margin-right: 20px;">
+                                            <input class="form-check-input" type="checkbox" name="checkbox" id="{{ category.id }}" value="" width="10px" />
+                                            <img src="{{ category.image.url }}" alt="" width="50px" height="60px"/>
+                                            <label class="form-check-label" for="{{ category.id }}" style="margin-left: 10px;"><span>{{ category.title }}</span></label>  
+                                        </div>
+                                        {% endfor %}
+                                        
+
+
+                                        <!-- <ul class="my_ul">
+                                            {% for category in categories|slice:":6" %}
+                                                <li class="my_li {% if forloop.last or forloop.revcounter <= 2 %}{% if forloop.last %}fifth-item{% elif forloop.revcounter == 2 %}sixth-item{% endif %}{% endif %}">
+                                                    <a href="{% url 'core:category_product_list' category.cid %}">
+                                                        <img src="{{ category.image.url }}" alt="" />{{ category.title }}
+                                                    </a>
+                                                </li>
+                                            {% endfor %}
                                         </ul>
+
+
+     -->
+                                            <div class="d-flex categori-dropdown-inner">
+                                            
+                                        <div class="more_slide_open" style="display: none">
+                                            {% for category in categories|slice:"3:6" %}
+                                            <div style="display: flex; align-items: center; margin-right: 20px;">
+                                                <input class="form-check-input" type="checkbox" name="checkbox" id="{{ category.id }}" value="" width="10px" />
+                                                <img src="{{ category.image.url }}" alt="" width="50px" height="60px"/>
+                                                <label class="form-check-label" for="{{ category.id }}" style="margin-left: 10px;"><span>{{ category.title }}</span></label>  
+                                            </div>
+                                            {% endfor %}
+                                            <div class="d-flex categori-dropdown-inner">
+                                              
+        
+                                            <!-- <ul class="my_ul">
+                                                {% for category in categories|slice:"6:" %}
+                                                    <li class="my_li {% if forloop.last or forloop.revcounter <= 2 %}{% if forloop.last %}fifth-item{% elif forloop.revcounter == 2 %}sixth-item{% endif %}{% endif %}">
+                                                        <a href="{% url 'core:category_product_list' category.cid %}">
+                                                            <img src="{{ category.image.url }}" alt="" />{{ category.title }}
+                                                        </a>
+                                                    </li>
+                                                {% endfor %}
+                                            </ul>
+         -->
+        
+                                            </div>
+                                        </div>
+
+
+<div style="height: 50px; width: 50px;"></div>
+                                        <div class="more_categories"><span class="icon"></span> <span class="heading-sm-1">Show more...</span></div>
                                     </div>
+                                        </div>
+
+
+
+
+
+
+
+
+        
                                 </div>
                             </div>
                             <div class="col-xl-3 col-lg-6 col-md-6 mb-lg-0 mb-md-2 mb-sm-2">
@@ -153,7 +201,7 @@
                                         </div>
                                         </div>
                                     
-                                        <button class="price-range-search" id="price-range-submit">Search</button>
+                                        <!-- <button class="price-range-search" id="price-range-submit">Search</button> -->
                                     
                                         <div id="searchResults" class="search-results-block"></div>
                                     
@@ -175,7 +223,7 @@
                 <div class="col-12">
                     <div class="shop-product-fillter">
                         <div class="totall-product">
-                            <p>We found <strong class="text-brand">29</strong> items for you!</p>
+                            <p>We found <strong class="text-brand">{{ products.count }}</strong> items for you!</p>
                         </div>
                         <div class="sort-by-product-area">
                             <div class="sort-by-cover mr-10">
@@ -224,7 +272,7 @@
                             <div class="product-cart-wrap mb-30 wow animate__animated animate__fadeIn" data-wow-delay=".1s">
                                 <div class="product-img-action-wrap">
                                     <div class="product-img product-img-zoom">
-                                        <a href="shop-product-right.html">
+                                        <a href="{% url 'core:get_products' p.pid %}">
                                             <img class="default-img" src="{{ p.image.url }}" alt="" />
                                             <img class="hover-img" src="{{ p.image.url }}" alt="" />
                                         </a>
@@ -240,9 +288,9 @@
                                 </div>
                                 <div class="product-content-wrap">
                                     <div class="product-category">
-                                        <a href="shop-grid-right.html">{{p.category.title}}</a>
+                                        <a href="">{{p.category.title}}</a>
                                     </div>
-                                    <h2><a href="shop-product-right.html">{{p.title}}</a></h2>
+                                    <h2><a href="{% url 'core:get_products' p.pid %}">{{p.title}}</a></h2>
                                     <div class="product-rate-cover">
                                         <div class="product-rate d-inline-block">
                                             <div class="product-rating" style="width: 90%"></div>
@@ -250,7 +298,7 @@
                                         <span class="font-small ml-5 text-muted"> (4.0)</span>
                                     </div>
                                     <div>
-                                        <span class="font-small text-muted">By <a href="vendor-details-1.html">{{p.vendor}}</a></span>
+                                        <span class="font-small text-muted">By <a href="{% url 'core:selected_vendor' p.vendor.vid %}">{{p.vendor}}</a></span>
                                     </div>
                                     <div class="product-card-bottom">
                                         <div class="product-price">

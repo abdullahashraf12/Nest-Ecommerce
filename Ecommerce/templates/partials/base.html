@@ -121,21 +121,14 @@
                     </div>
                     <div class="header-right">
                         <div class="search-style-2">
-                            <form action="#">
-                                <select class="select-active">
-                                    <option>All Categories</option>
-                                    <option>Milks and Dairies</option>
-                                    <option>Wines & Alcohol</option>
-                                    <option>Clothing & Beauty</option>
-                                    <option>Pet Foods & Toy</option>
-                                    <option>Fast food</option>
-                                    <option>Baking material</option>
-                                    <option>Vegetables</option>
-                                    <option>Fresh Seafood</option>
-                                    <option>Noodles & Rice</option>
-                                    <option>Ice cream</option>
+                            <form action="{% url 'core:get_products_name'  %}">
+                                <select class="select-active" name="category_category">
+                                    <option value="">All Categories</option>
+                                    {% for category in categories %}
+                                    <option value="{{ category.cid }}">{{ category.title }}</option>
+                                    {% endfor %}
                                 </select>
-                                <input type="text" placeholder="Search for items..." />
+                                <input name="search_name"  type="text" placeholder="Search for items..." />
                             </form>
                         </div>
                         <div class="header-action-right">
@@ -304,24 +297,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                                 </div>
                                 <div class="more_slide_open" style="display: none">
                                     <div class="d-flex categori-dropdown-inner">
@@ -340,6 +315,7 @@
 
                                     </div>
                                 </div>
+                                
                                 <div class="more_categories"><span class="icon"></span> <span class="heading-sm-1">Show more...</span></div>
                             </div>
                         </div>
@@ -362,7 +338,7 @@
                                         <a href="page-about.html">About</a>
                                     </li>
                                     <li>
-                                        <a href="shop-grid-right.html">Categories <i class="fi-rs-angle-down"></i></a>
+                                        <a href="{% url 'core:category_list' %}">Categories <i class="fi-rs-angle-down"></i></a>
                                         <ul class="sub-menu">
                                             {% for i in categories %}
                                             <li><a href="{% url 'core:category_product_list' i.cid %}">{{i.title}}</a>
@@ -403,7 +379,7 @@
                                         </ul>
                                     </li>
                                     <li>
-                                        <a href="#">Vendors <i class="fi-rs-angle-down"></i></a>
+                                        <a href="{% url 'core:show_vendor_list' %}">Vendors <i class="fi-rs-angle-down"></i></a>
                                         <ul class="sub-menu">
                                            {% for i in vendors %}
                                            <li><a href="{% url 'core:selected_vendor' i.vid %}">{{i.title}}</a></li>
