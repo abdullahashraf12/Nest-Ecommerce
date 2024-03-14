@@ -76,12 +76,13 @@ class Tags(models.Model):
 
 
 class Products(models.Model):
+    exclude = ('user',)  # Exclude the user field from the admin form
     pid =ShortUUIDField(unique=True,length=10,max_length= 20,alphabet="abcdefgh12345")
     title = models.CharField(max_length = 100,default="Fresh Pear")
     image = models.ImageField(upload_to=user_directory_path,default="product.jpg")
     back_image = models.ImageField(upload_to=user_directory_path,default="product.jpg")
     description = models.TextField(null=True,blank=True)
-    user=models.ForeignKey(User,on_delete=models.SET_NULL,null=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, editable=False) 
     category = models.ForeignKey(Category,on_delete=models.SET_NULL,null=True,related_name="category")
     vendor = models.ForeignKey(Vendor,on_delete=models.SET_NULL,null=True,related_name = "product")
     price = models.DecimalField(max_digits=9999999999999,decimal_places = 2,default="1.99")
@@ -106,6 +107,12 @@ class Products(models.Model):
     def precentage(self):
         new_price = (self.price/self.old_Price) * 100
         return new_price
+    def save(self, *args, **kwargs):
+        if not self.pk and not self.user_id:  # If the instance is being created and user is not set
+            # Set the current logged-in user as the default value
+            self.user = kwargs.pop('user', None)
+        super().save(*args, **kwargs)
+
 class ProductImages(models.Model):
     images = models.ImageField(upload_to="product-images",default="product.jpg")
     product = models.ForeignKey(Products,on_delete=models.SET_NULL,null=True,related_name="p_images")

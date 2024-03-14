@@ -1,13 +1,24 @@
 from django.contrib import admin
 from core.models import Products,Category,Vendor,CardOrder,CardOrderItems,ProductImages,ProductReview,WishList,Address,Tags
+import logging
 # Register your models here.
+logger = logging.getLogger(__name__)
 
 class ProductImagesAdmin(admin.TabularInline):
     model=ProductImages
 
 class ProductAdmin(admin.ModelAdmin):
+    exclude = ('user',)  # Exclude the user field from the admin form
     inlines = [ProductImagesAdmin]
     list_display= ["user","title","product_image","price","featured","status"]
+
+    def save_model(self, request, obj, form, change):
+        # If the user field is not set, set it to the logged-in admin user
+        if not obj.user:
+            logger.debug(f"User field is not set. Setting it to the logged-in admin user: {request.user}")
+            obj.user = request.user
+        super().save_model(request, obj, form, change)
+
 class CategoryAdmin(admin.ModelAdmin):
     list_display= ["title","category_image"]
 
