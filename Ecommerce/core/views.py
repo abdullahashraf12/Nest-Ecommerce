@@ -26,9 +26,11 @@ def category_list(request):
 def category_product_list_view(request,cid):
     category = Category.objects.get(cid=cid)
     products = Products.objects.filter(products_status="published",category=category)
+    categ_all = Category.objects.all()
     context={
         "category":category,
-        "products":products
+        "products":products,
+        "categ_all":categ_all
     }
     return render(request=request,template_name="customer_front_end_ltr/shop-grid-left.html",context=context)
 def show_vendor_list(request):

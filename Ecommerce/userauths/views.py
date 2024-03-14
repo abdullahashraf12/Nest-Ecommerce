@@ -26,6 +26,7 @@ def register_user(request):
     context = {"form": form}
     
     return render(request, "customer_front_end_ltr/userauth/sign-up.html", context=context)
+
 def login_view(request):
     if request.user.is_authenticated:
         return redirect("core:index")
@@ -33,6 +34,8 @@ def login_view(request):
     if request.method == "POST":
         email = request.POST.get("email")
         password = request.POST.get("password")
+        print(email)
+        print(password)
         try:
             user = User.objects.get(email=email)
         except:
