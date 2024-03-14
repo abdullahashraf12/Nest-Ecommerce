@@ -1,6 +1,5 @@
 from django.shortcuts import render
-from core.models import Products,Category,Vendor,CardOrder,CardOrderItems,ProductImages,ProductReview,WishList,Address
-
+from core.models import Products,Category,Vendor,CardOrder,CardOrderItems,ProductImages,ProductReview,WishList,Address,Tags
 # Create your views here.
 def index(request):
     # bananas = Products.objects.all().order_by("-id")
@@ -72,6 +71,7 @@ def get_products_name(request):
     # print(prod_name)
     bananas = Products.objects.all()
     vendors=Vendor.objects.all()
+    tags = Tags.objects.all()
     if(categ_name=="All Categories" or categ_name==""):
         bananas = Products.objects.filter(products_status="published",title__icontains=prod_name)
         print(categ_name)
@@ -87,6 +87,7 @@ def get_products_name(request):
         print("I am Here 2")
     context = {
         "products":bananas,
-        "vendors":vendors
+        "vendors":vendors,
+        "tags":tags
     }
     return render(request,template_name="customer_front_end_ltr/shop-filter.html",context=context)

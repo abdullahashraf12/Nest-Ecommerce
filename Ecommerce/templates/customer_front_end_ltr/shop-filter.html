@@ -34,6 +34,7 @@
                                             <label class="form-check-label" for="{{ category.cid }}" style="margin-left: 10px;"><span>{{ category.title }}</span></label>  
                                         
                                         </div>
+                                        <div style="height: 5px;"></div>
                                         {% endfor %}
                                         
 
@@ -307,27 +308,19 @@
                                     <h5 class="mb-30">By Tags</h5>
                                     <div class="sidebar-widget widget-tags">
                                         <ul class="tags-list">
-                                            <li class="hover-up">
-                                                <a href="blog-category-grid.html"><i class="fi-rs-cross mr-10"></i>Milk</a>
+                                            {% for t in tags %}
+                                            <li name="tag" id="{{ t.tid }}" class="hover-up">
+                                                <a style="color: green;"><i class="fi-rs-cross mr-10" id="{{ t.tid }}"></i>{{ t.title }}</a>
                                             </li>
-                                            <li class="hover-up">
-                                                <a href="blog-category-grid.html"><i class="fi-rs-cross mr-10"></i>Broccoli</a>
-                                            </li>
-                                            <li class="hover-up">
-                                                <a href="blog-category-grid.html"><i class="fi-rs-cross mr-10"></i>Smoothie</a>
-                                            </li>
-                                            <li class="hover-up">
-                                                <a href="blog-category-grid.html"><i class="fi-rs-cross mr-10"></i>Fruit</a>
-                                            </li>
-                                            <li class="hover-up mr-0">
+                                            {% endfor %}
+                                            <!-- <li class="hover-up mr-0">
                                                 <a href="blog-category-grid.html"><i class="fi-rs-cross mr-10"></i>Salad</a>
-                                            </li>
-                                            <li class="hover-up mr-0">
-                                                <a href="blog-category-grid.html"><i class="fi-rs-cross mr-10"></i>Appetizer</a>
                                             </li>
                                             <li class="hover-up mr-0 mb-0">
                                                 <a href="blog-category-grid.html"><i class="fi-rs-cross mr-10"></i>Appetizer</a>
-                                            </li>
+                                            </li> -->
+
+                                            
                                         </ul>
                                     </div>
                                 </div>
@@ -375,7 +368,7 @@
                 <div class="col-12">
                     <div class="shop-product-fillter">
                         <div class="totall-product">
-                            <p>We found <strong class="text-brand">{{ products.count }}</strong> items for you!</p>
+                            <p>We found <strong class="text-brand" id="number_of_all_showed_products">{{ products.count }}</strong> items for you!</p>
                         </div>
                         <div class="sort-by-product-area">
                             <div class="sort-by-cover mr-10">
@@ -420,13 +413,13 @@
                     </div>
                     <div class="row product-grid">
                         {% for p in products %}
-                        <div class="col-lg-1-5 col-md-4 col-12 col-sm-6">
+                        <div name="product_card" data-product-tag="{{ p.tags.title }}" data-product-price="{{ p.price }}" data-categ_name = "{{ p.category.title }}" data-categ_id="{{ p.category.cid }}" data-product_id="{{p.pid}}" class="col-lg-1-5 col-md-4 col-12 col-sm-6">
                             <div class="product-cart-wrap mb-30 wow animate__animated animate__fadeIn" data-wow-delay=".1s">
                                 <div class="product-img-action-wrap">
                                     <div class="product-img product-img-zoom">
                                         <a href="{% url 'core:get_products' p.pid %}">
                                             <img class="default-img" src="{{ p.image.url }}" alt="" />
-                                            <img class="hover-img" src="{{ p.image.url }}" alt="" />
+                                            <img class="hover-img" src="{{ p.back_image.url }}" alt="" />
                                         </a>
                                     </div>
                                     <div class="product-action-1">
@@ -650,4 +643,5 @@
             </div>
         </div>
     </main>
+
  {% endblock content %}
