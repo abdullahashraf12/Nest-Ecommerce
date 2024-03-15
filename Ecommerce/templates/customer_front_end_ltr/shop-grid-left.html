@@ -1149,7 +1149,7 @@
                         <ul>
                             {%for i in categ_all|slice:":3"%}
                             <li>
-                                <a href="shop-grid-right.html"> <img src="{{ i.image.url }}" alt="" />{{ i.title }}</a><span class="count">{{i.category.count}} </span>
+                                <a href="{% url 'core:category_product_list' i.cid %}"> <img src="{{ i.image.url }}" alt="" />{{ i.title }}</a><span class="count">{{i.category.count}} </span>
                             </li>
                           {% endfor %}
                           <h5 class=" style-1 mb-30">& More</h5>
