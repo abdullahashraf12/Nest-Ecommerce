@@ -1,5 +1,5 @@
 from django.contrib import admin
-from core.models import Products,Category,Vendor,CardOrder,CardOrderItems,ProductImages,ProductReview,WishList,Address,Tags
+from core.models import Products,Category,Vendor,CardOrder,CardOrderItems,ProductImages,ProductReview,WishList,Address,Tags, UserOrderCard
 import logging
 # Register your models here.
 logger = logging.getLogger(__name__)
@@ -42,6 +42,10 @@ class AddressAdmin(admin.ModelAdmin):
     list_display= ["user","address","status"]
 class TagsAdmin(admin.ModelAdmin):
     list_display= ["tid","title"]
+class Card_items_Admin(admin.ModelAdmin):
+    search_fields = ['user__email']
+    list_display= ["user","uoc_prod"]
+
 admin.site.register(Products,ProductAdmin)
 admin.site.register(Category,CategoryAdmin)
 admin.site.register(Vendor,VendorAdmin)
@@ -51,3 +55,4 @@ admin.site.register(ProductReview,ProductReviewAdmin)
 admin.site.register(WishList,WichListAdmin)
 admin.site.register(Address,AddressAdmin)
 admin.site.register(Tags,TagsAdmin)
+admin.site.register(UserOrderCard,Card_items_Admin)

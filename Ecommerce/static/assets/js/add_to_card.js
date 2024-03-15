@@ -12,20 +12,91 @@ $(document).ready(function() {
         } else {
 
             var csrftoken = getCookie('csrftoken');
+            // Get the list of options
+            var sizeList = document.querySelector('.size-filter');
 
+            // Find the active option
+            var activeOption = sizeList.querySelector('li.active');
+
+            // Get the text content of the active option
+            var activatedOption = activeOption.querySelector('a').textContent;
+
+            // Log the activated option
+            console.log("Activated option:", activatedOption);
             $.ajax({
                 url: "/add_to_card/", // Make sure the URL is correct
                 method: "POST", // Specify the request method
                 data: {
-                    pid: $('[name="product_pid_to_card"]').val()
+                    pid: $('[name="product_pid_to_card"]').val(),
+                    qty: $('[name="prod_quantity_n"]').val(),
+                    size:activatedOption
                 },
                 dataType: 'json',
                 beforeSend: function(xhr) {
                     xhr.setRequestHeader("X-CSRFToken", csrftoken); // Set the CSRF token in the request header
                     console.log("Adding Products to Card")
                 },
-                success: function(response) {
-                    console.log(response)
+                success: function(response2) {
+          console.log("product added or modified")
+
+
+
+
+
+
+                    $.ajax({
+                        url: "/add_to_card/", // Make sure the URL is correct
+                        method: "GET", // Specify the request method
+                        data: {}, // You can pass any data here if needed
+                        dataType: 'json',
+                        beforeSend: function(xhr) {
+                            // Code to run before the request is sent
+                        },
+                        success: function(response2) {
+                            // Code to run if the request succeeds
+                            var userOrderCards = JSON.parse(response2.prod_card);
+                            $("#Shopping_card").empty();
+
+                            for (var i = 0; i < userOrderCards.length; i++) {
+                                var userOrderCard = userOrderCards[i];
+                                console.log(userOrderCard)
+                                console.log(userOrderCard.uoc_prod__image.url)
+                                // Create the HTML for the li tag
+                                var liHtml = '<li>' +
+                                                '<div class="shopping-cart-img">' +
+                                                    '<a href="shop-product-right.html"><img alt="Nest" src="/media/' +userOrderCard.uoc_prod__image+ '" /></a>' +
+                                                '</div>' +
+                                                '<div class="shopping-cart-title">' +
+                                                    '<h4><a href="/get_products/'+userOrderCard.uoc_prod__pid+'">' + userOrderCard.uoc_prod__title + '</a></h4>' +
+                                                    '<h4><span>' + userOrderCard.qty + ' × </span>' + userOrderCard.weight + '</h4>' +
+                                                '</div>' +
+                                                '<div class="shopping-cart-delete">' +
+                                                    '<a href="#"><i class="fi-rs-cross-small"></i></a>' +
+                                                '</div>' +
+                                             '</li>';
+                    
+                                // Append the liHtml to the ul element with ID "Shopping_card"
+                                $('#Shopping_card').append(liHtml);
+                            }
+                        },
+                        error: function(xhr, textStatus, errorThrown) {
+                            // Code to run if the request fails
+                            // Log the specific error message from the response
+                            if (xhr.responseText) {
+                                alert(xhr.responseText); // Display the error message
+                            } else {
+                                console.error("Error:", textStatus, errorThrown);
+                            }
+                        }
+                    });
+                    
+
+
+
+
+
+                    
+                    
                 },
                 error: function(xhr, textStatus, errorThrown) {
                     // console.error("Error:", textStatus, errorThrown);
@@ -34,6 +105,10 @@ $(document).ready(function() {
                                
                 }
             });
+
+
+
+
 
         }
     });

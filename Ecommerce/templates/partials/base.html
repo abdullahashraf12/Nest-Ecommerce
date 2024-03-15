@@ -172,24 +172,27 @@
                                 <div class="header-action-icon-2">
                                     <a class="mini-cart-icon" href="shop-cart.html">
                                         <img alt="Nest" src="{% static 'assets/imgs/theme/icons/icon-cart.svg' %}" />
-                                        <span class="pro-count blue">2</span>
+                                        <span class="pro-count blue" id="number_of_products_in_card">0</span>
                                     </a>
                                     <a href="shop-cart.html"><span class="lable">Cart</span></a>
                                     <div class="cart-dropdown-wrap cart-dropdown-hm2">
-                                        <ul>
+                                        <ul id="Shopping_card">
                                             <li>
-                                                <div class="shopping-cart-img">
-                                                    <a href="shop-product-right.html"><img alt="Nest" src="{% static 'assets/imgs/shop/thumbnail-3.jpg' %}" /></a>
+                                                
+                                                <!-- <div class="shopping-cart-img">
+                                                    <a href="shop-product-right.html"><img alt="Nest" src="Put image here" /></a>
                                                 </div>
                                                 <div class="shopping-cart-title">
-                                                    <h4><a href="shop-product-right.html">Daisy Casual Bag</a></h4>
-                                                    <h4><span>1 × </span>$800.00</h4>
+                                                    <h4><a href="shop-product-right.html">put title here</a></h4>
+                                                    <h4><span>1 × </span>put price here</h4>
                                                 </div>
                                                 <div class="shopping-cart-delete">
                                                     <a href="#"><i class="fi-rs-cross-small"></i></a>
                                                 </div>
-                                            </li>
-                                            <li>
+                                            </li> -->
+                                        </ul>
+
+                                            <!-- <li>
                                                 <div class="shopping-cart-img">
                                                     <a href="shop-product-right.html"><img alt="Nest" src="{% static 'assets/imgs/shop/thumbnail-2.jpg' %}" /></a>
                                                 </div>
@@ -200,8 +203,7 @@
                                                 <div class="shopping-cart-delete">
                                                     <a href="#"><i class="fi-rs-cross-small"></i></a>
                                                 </div>
-                                            </li>
-                                        </ul>
+                                            </li> -->
                                         <div class="shopping-cart-footer">
                                             <div class="shopping-cart-total">
                                                 <h4>Total <span>$4000.00</span></h4>
@@ -831,6 +833,8 @@
     <script src="{% static 'assets/js/iframe_close.js' %}"></script>
     <script src="{% static 'assets/js/prod_qty.js' %}"></script>
     <script src="{% static 'assets/js/add_to_card.js' %}"></script>
+    <script src="{% static 'assets/js/ajax_get_Card.js' %}"></script>
+    
 </body>
 
 </html>

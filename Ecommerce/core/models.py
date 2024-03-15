@@ -180,3 +180,7 @@ class UserOrderCard(models.Model):
     uoc_id = ShortUUIDField(unique=True, length=10, max_length=20, prefix="uoc", alphabet="abcdefgh12345", default=ShortUUIDField.generated)
     user= models.ForeignKey(User,on_delete=models.CASCADE)
     uoc_prod=models.ForeignKey(Products,on_delete=models.CASCADE)
+    qty=models.IntegerField()
+    weight=models.CharField(max_length=200)
+    def __str__(self):
+        return self.user.email

@@ -3,6 +3,12 @@ from rest_framework.response import Response
 from core.models import Products,Category,Vendor,CardOrder,CardOrderItems,ProductImages,ProductReview,WishList,Address,Tags,UserOrderCard
 from rest_framework.views import APIView
 from rest_framework import status
+from django.db.models import Q
+from django.core.serializers import serialize
+from django.http import JsonResponse
+from django.http import JsonResponse
+from django.core.serializers.json import DjangoJSONEncoder
+import json
 # Create your views here.
 def index(request):
     # bananas = Products.objects.all().order_by("-id")
@@ -103,32 +109,104 @@ def get_products_name(request):
 
 
 
+
+
 class AddToCardView(APIView):
     def add_to_card_post(self, request):
         try:
-
             email = request.user.email
             pid = request.data.get('pid')
-            print(email)
-            print(pid)
-            product = Products.objects.get(pid=pid)
-            print(product.image.url)
+            qty = request.data.get('qty')
+            size = request.data.get('size')
 
-            return Response({
-                "prod_title":product.title,
-                             
-                             
-                              })
+            # Assuming 'pid' is unique for products, you may need to handle multiple instances if not unique
+            user_order_cards = UserOrderCard.objects.filter(
+                Q(user__email=email) & Q(uoc_prod__pid=pid)
+            )
+           
+
+            if user_order_cards.exists():
+                # Update the quantity and size fields of existing UserOrderCard instances
+                for user_order_card in user_order_cards:
+                    user_order_card.qty = qty
+                    user_order_card.weight = size
+                    user_order_card.save()
+
+                # Assuming you only want to return the uoc_id of the first matching UserOrderCard instance
+                uoc_id = user_order_cards.first().uoc_id
+                return Response({"prod_card": uoc_id})
+            else:
+                if qty is not None:  # Ensure qty is not None before creating the UserOrderCard instance
+                    card = UserOrderCard(user=request.user, uoc_prod=Products.objects.get(pid=pid), qty=qty, weight=size)
+                    card.save()
+                    return Response({"message": "No matching product in the user's order card."})
+                else:
+                    return Response({"error": "Quantity cannot be empty."}, status=400)
         except Exception as e:
             return Response({"error": str(e)}, status=400)
-        
     def add_to_card_get(self, request):
-        # Handle GET requests if needed
-        return Response({"message": "GET request received."})
+        try:
+            email = request.user.email
+            user_order_cards_all = UserOrderCard.objects.filter(
+                user__email=email
+            )
+            
+            # Select specific fields from the related Products model
+            user_order_cards_all = user_order_cards_all.select_related('uoc_prod')
+            user_order_cards_data = user_order_cards_all.values(
+                'uoc_id',
+                'user__email',
+                'uoc_prod__title',
+                'uoc_prod__price',
+                'uoc_prod__image',
+                'uoc_prod__pid',
+                'qty',
+                'weight'
+            )
+            
+            # Convert the values queryset to a list of dictionaries
+            user_order_cards_list = list(user_order_cards_data)
+            
+            # Use JSON encoder to serialize the list of dictionaries
+            serialized_data = json.dumps(user_order_cards_list, cls=DjangoJSONEncoder)
+            
+            return JsonResponse({"prod_card": serialized_data}, safe=False)
+        except Exception as e:
+            return JsonResponse({"prod_card": ""}, safe=False)
+
+    def get(self, request, *args, **kwargs):
+        return self.add_to_card_get(request, *args, **kwargs)
+
     def post(self, request, *args, **kwargs):
         return self.add_to_card_post(request, *args, **kwargs)
-    def add_to_card_get(self, request, *args, **kwargs):
-        return self.add_to_card_post(request, *args, **kwargs)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # def add_to_card(request):
 #     context={}
 #     print(request.user.username)
