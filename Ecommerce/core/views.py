@@ -43,9 +43,13 @@ def show_vendor_list(request):
 def vendor_details_view(request,vid):
     vendor  = Vendor.objects.get(vid=vid)
     products=Products.objects.filter(vendor=vendor,products_status="published")
+    category = Category.objects.all()
+
     context = {
         "vendor":vendor,
-        "products":products
+        "products":products,
+        "category":category
+
     }
     return render(request=request,template_name="customer_front_end_ltr/vendor-details-2.html",context=context)
 def get_product_by_id(request,pid):
