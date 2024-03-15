@@ -56,10 +56,10 @@ def get_product_by_id(request,pid):
     
     product=Products.objects.get(pid=pid)
     p_images = product.p_images.all()
-    related_products = Products.objects.filter(category=product.category)
+    related_products = Products.objects.filter(category=product.category).exclude(pid=pid)
     vendor = product.vendor
     category =Category.objects.all();
-    latest_products = Products.objects.filter(category=product.category).order_by('date')
+    latest_products = Products.objects.filter(category=product.category).exclude(pid=pid).order_by('date')
     context = {
         "product":product,
         "p_images":p_images,
