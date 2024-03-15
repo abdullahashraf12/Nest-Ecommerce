@@ -827,33 +827,8 @@
     <script src="{% static 'assets/js/price_range_script.js' %}"></script>
     <script src="{% static 'assets/js/filter_system.js' %}"></script>
     <script src="{% static 'assets/js/iframe_open.js' %}"></script>
-    <script>
-                var iframe = window.parent.document.getElementById('popup-iframe');
-                const overlay = window.parent.document.querySelector('.overlay');
-                const popup = window.parent.document.querySelector('.popup');
-
-
-          function closePopup() {
-    overlay.style.display = 'none';
-    popup.style.display = 'none';
-    iframe.src = ''; // Reset iframe src
-  }
-
-        var button = $("#button_close_iframe");
-   
-    if (window.parent !== window) {
-
-            button.removeAttr("hidden");
-        
-            button.on("click", function() {
-                closePopup();
-            
-                });
-        } else {
-
-        }
-      
-    </script>
+    <script src="{% static 'assets/js/iframe_close.js' %}"></script>
+    <script src="{% static 'assets/js/prod_qty.js' %}"></script>
 </body>
 
 </html>
