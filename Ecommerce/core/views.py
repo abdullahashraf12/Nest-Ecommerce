@@ -1,5 +1,8 @@
-from django.shortcuts import render
-from core.models import Products,Category,Vendor,CardOrder,CardOrderItems,ProductImages,ProductReview,WishList,Address,Tags
+from django.shortcuts import render 
+from rest_framework.response import Response
+from core.models import Products,Category,Vendor,CardOrder,CardOrderItems,ProductImages,ProductReview,WishList,Address,Tags,UserOrderCard
+from rest_framework.views import APIView
+from rest_framework import status
 # Create your views here.
 def index(request):
     # bananas = Products.objects.all().order_by("-id")
@@ -97,3 +100,49 @@ def get_products_name(request):
         "tags":tags
     }
     return render(request,template_name="customer_front_end_ltr/shop-filter.html",context=context)
+
+
+
+class AddToCardView(APIView):
+    def add_to_card_post(self, request):
+        try:
+
+            email = request.user.email
+            pid = request.data.get('pid')
+            print(email)
+            print(pid)
+            product = Products.objects.get(pid=pid)
+            print(product.image.url)
+
+            return Response({
+                "prod_title":product.title,
+                             
+                             
+                              })
+        except Exception as e:
+            return Response({"error": str(e)}, status=400)
+        
+    def add_to_card_get(self, request):
+        # Handle GET requests if needed
+        return Response({"message": "GET request received."})
+    def post(self, request, *args, **kwargs):
+        return self.add_to_card_post(request, *args, **kwargs)
+    def add_to_card_get(self, request, *args, **kwargs):
+        return self.add_to_card_post(request, *args, **kwargs)
+# def add_to_card(request):
+#     context={}
+#     print(request.user.username)
+
+#     if(request.method == "POST"):
+#         # request.POST.get("")
+#         data=UserOrderCard()
+#         data.save()
+#         context={
+
+#         }
+
+#         return Response(context)
+#     else:
+#         context={}
+
+#         return Response(context)

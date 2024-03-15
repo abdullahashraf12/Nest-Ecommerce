@@ -47,6 +47,8 @@
 </head>
 
 <body>
+    <input id="email_exist" value="{{ request.user.email }}" hidden/>
+
     <header class="header-area header-style-1 header-height-2">
         <div class="mobile-promotion">
             <span>Grand opening, <strong>up to 15%</strong> off all items. Only <strong>3 days</strong> left</span>
@@ -235,7 +237,6 @@
                                             </li>
                                             
                                             {% if request.user.is_authenticated %}
-
 
                                             <li>
                                                 <a href="{% url 'userauths:sign-out' %}"><i class="fi fi-rs-sign-out mr-10"></i>Sign Out</a>
@@ -829,6 +830,7 @@
     <script src="{% static 'assets/js/iframe_open.js' %}"></script>
     <script src="{% static 'assets/js/iframe_close.js' %}"></script>
     <script src="{% static 'assets/js/prod_qty.js' %}"></script>
+    <script src="{% static 'assets/js/add_to_card.js' %}"></script>
 </body>
 
 </html>
