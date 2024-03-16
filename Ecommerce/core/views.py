@@ -1,4 +1,4 @@
-from django.shortcuts import render 
+from django.shortcuts import render ,redirect
 from rest_framework.response import Response
 from core.models import Products,Category,Vendor,CardOrder,CardOrderItems,ProductImages,ProductReview,WishList,Address,Tags,UserOrderCard
 from rest_framework.views import APIView
@@ -183,8 +183,11 @@ class AddToCardView(APIView):
 
 
 
-
-
+def show_card(request):
+    if request.user.is_authenticated:
+        return render(request,template_name="customer_front_end_ltr/shop-cart.html")
+    else:
+        return redirect("userauths:sign-in")
 
 
 
