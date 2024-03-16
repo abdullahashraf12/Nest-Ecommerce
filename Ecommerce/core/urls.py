@@ -1,9 +1,9 @@
 from django.contrib import admin
 from django.urls import include,path
-from core.views import index,product_list,category_list,category_product_list_view,show_vendor_list,vendor_details_view,get_product_by_id,get_products_name,AddToCardView,show_card
+from core.views import index,product_list,category_list,category_product_list_view,show_vendor_list,vendor_details_view,get_product_by_id,get_products_name,AddToCardView,show_card,RemoveFromCardView
 app_name = "core"
 urlpatterns = [
-
+path('remove_from_card/', RemoveFromCardView.as_view(), name='remove_from_card'),
 path('add_to_card/', AddToCardView.as_view(), name='add_to_card'),
 path("",index,name="index"),
 path("show_card/",show_card,name="show_card"),

@@ -209,10 +209,10 @@
 
                                             <div class="shopping-cart-total">
 
-                                                <h4>Total <span>$0.00</span></h4>
+                                                <h4>Total <span id="total_product_price_card">$0.00</span></h4>
                                             </div>
                                             <div class="shopping-cart-button">
-                                                <a href="shop-cart.html" class="outline">View cart</a>
+                                                <a href="{% url 'core:show_card' %}" class="outline">View cart</a>
                                                 <a href="shop-checkout.html">Checkout</a>
                                             </div>
                                             {% else %}
@@ -844,6 +844,7 @@
     <script src="{% static 'assets/js/prod_qty.js' %}"></script>
     <script src="{% static 'assets/js/add_to_card.js' %}"></script>
     <script src="{% static 'assets/js/ajax_get_Card.js' %}"></script>
+    <script src="{% static 'assets/js/delete_from_card.js' %}"></script>
     
 </body>
 

@@ -9,27 +9,48 @@ function myFunction() {
         },
         success: function(response2) {
             try {
+                var csrftoken = getCookie('csrftoken');
+
                 var userOrderCards = JSON.parse(response2.prod_card);
                 $("#Shopping_card").empty();
                 $("#number_of_products_in_card").html(userOrderCards.length);
+                var price =0;
                 for (var i = 0; i < userOrderCards.length; i++) {
                     var userOrderCard = userOrderCards[i];
                     console.log(userOrderCard);
                     console.log(userOrderCard.uoc_prod__image.url);
+                    price += parseFloat(userOrderCard.uoc_prod__price); // Use parseFloat to ensure proper addition
                     var liHtml = '<li>' +
-                        '<div class="shopping-cart-img">' +
-                        '<a href="shop-product-right.html"><img alt="Nest" src="/media/' + userOrderCard.uoc_prod__image + '" /></a>' +
-                        '</div>' +
-                        '<div class="shopping-cart-title">' +
-                        '<h4><a href="/get_products/' + userOrderCard.uoc_prod__pid + '">' + userOrderCard.uoc_prod__title + '</a></h4>' +
-                        '<h4><span>' + userOrderCard.qty + ' × </span>' + userOrderCard.weight + '</h4>' +
-                        '</div>' +
-                        '<div class="shopping-cart-delete">' +
-                        '<a href="#"><i class="fi-rs-cross-small"></i></a>' +
-                        '</div>' +
-                        '</li>';
+                    '<div class="shopping-cart-img">' +
+                    '<a href="/get_products/' + userOrderCard.uoc_prod__pid + '"><img alt="Nest" src="/media/' + userOrderCard.uoc_prod__image + '" /></a>' +
+                    '</div>' +
+                    '<div class="shopping-cart-title">' +
+                    '<h4><a href="/get_products/' + userOrderCard.uoc_prod__pid + '">' + userOrderCard.uoc_prod__title + '</a></h4>' +
+                    '<h4><span>' + userOrderCard.qty + ' × </span>' + userOrderCard.weight + '</h4>' +
+                    '</div>' +
+                    '<div class="shopping-cart-delete">' +
+                    '<form class="delete-form" data-pid="' + userOrderCard.uoc_prod__pid + '">' +
+                    '<input type="hidden" name="csrfmiddlewaretoken" value="' + csrftoken + '">' +
+                
+                    '<button type="button" class="delete-button" style="background-color: red; ' +
+                    'border: 1px solid red; ' +
+                    'color: #fff; ' +
+                    'padding: 10px 20px; ' +
+                    'font-size: 16px; ' +
+                    'cursor: pointer; ' +
+                    'border-radius: 4px; ' +
+                    'transition: background-color 0.3s ease;">X</button>' +
+                
+                    '</form>' +
+                    '</div>' +
+                    '</li>';
+                
+
+                
                     $('#Shopping_card').append(liHtml);
                 }
+                $("#total_product_price_card").empty()
+                $("#total_product_price_card").html("$"+price.toString())
             } catch (error) {
                 console.error("Error parsing response:", error);
             }
@@ -42,5 +63,22 @@ function myFunction() {
         }
     });
 }
+// Function to retrieve CSRF token from the cookie
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
 
-setInterval(myFunction, 1000);
+
+setInterval(myFunction, 500);

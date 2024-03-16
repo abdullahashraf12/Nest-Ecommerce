@@ -107,6 +107,12 @@ def get_products_name(request):
     }
     return render(request,template_name="customer_front_end_ltr/shop-filter.html",context=context)
 
+def show_card(request):
+    if request.user.is_authenticated:
+        return render(request, template_name="customer_front_end_ltr/shop-cart.html")
+    else:
+        return redirect("userauths:sign-in")
+
 
 
 
@@ -180,32 +186,31 @@ class AddToCardView(APIView):
     def post(self, request, *args, **kwargs):
         return self.add_to_card_post(request, *args, **kwargs)
 
-
-
-
-def show_card(request):
-    if request.user.is_authenticated:
-        return render(request,template_name="customer_front_end_ltr/shop-cart.html")
-    else:
-        return redirect("userauths:sign-in")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+class RemoveFromCardView(APIView):
+    def remove_card_post(self, request):
+        try:
+            email = request.user.email
+            pid = request.data.get('pid')
+            
+            # Assuming 'pid' is unique for products, you may need to handle multiple instances if not unique
+            user_order_cards = UserOrderCard.objects.filter(
+                Q(user__email=email) & Q(uoc_prod__pid=pid)
+            )
+            
+            if user_order_cards.exists():
+                user_order_cards.delete()
+                prod_Delete_stat = "Success"
+                return Response({"Product_Delete_Status": prod_Delete_stat})
+            else:
+                prod_Delete_stat = "Failed"
+                return Response({"Product_Delete_Status": prod_Delete_stat + " Product Is Not In The Cart"})
+                
+        except Exception as e:
+            return Response({"error": str(e)}, status=400)
+        
+    def post(self, request, *args, **kwargs):
+        return self.remove_card_post(request, *args, **kwargs)
+ 
 
 
 
