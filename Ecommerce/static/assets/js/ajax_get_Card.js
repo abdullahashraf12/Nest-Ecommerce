@@ -35,11 +35,10 @@ function myFunction() {
                     '<button type="button" class="delete-button" style="background-color: red; ' +
                     'border: 1px solid red; ' +
                     'color: #fff; ' +
-                    'padding: 10px 20px; ' +
                     'font-size: 16px; ' +
                     'cursor: pointer; ' +
-                    'border-radius: 4px; ' +
-                    'transition: background-color 0.3s ease;">X</button>' +
+                    'border-radius: 4px;  ' +
+                    'transition: background-color 0.3s ease;  border-radius: 100%; ">X</button>' +
                 
                     '</form>' +
                     '</div>' +

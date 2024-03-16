@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'core',
     'userauths',
     'rest_framework',
+    'mobApi'
 ]
 
 MIDDLEWARE = [
