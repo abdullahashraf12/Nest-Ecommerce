@@ -34,13 +34,48 @@ class GetAllCategories(APIView):
 
 class GetAllVendors(APIView):
     def get_all_vendors(self,request):
-        get_all_vendors = list(Category.objects.all().values())
+        get_all_vendors = list(Vendor.objects.all().values())
         
         return JsonResponse(get_all_vendors, safe=False)
     def get(self, request, *args, **kwargs):
         return self.get_all_vendors(request, *args, **kwargs)
 
   
+class GetAllProductsName(APIView):
+    def get_all_prodName(self,request,pid):
+        get_all_vendors = list(Products.objects.filter(pid=pid).values())
+        
+        return JsonResponse(get_all_vendors, safe=False)
+    def get(self, request, *args, **kwargs):
+        return self.get_all_prodName(request, *args, **kwargs)
+
+  
+
+class GetAllCategoriesName(APIView):
+    def get_all_categName(self,request,cid):
+        get_all_vendors = list(Category.objects.filter(cid=cid).values())
+        
+        return JsonResponse(get_all_vendors, safe=False)
+    def get(self, request, *args, **kwargs):
+        return self.get_all_categName(request, *args, **kwargs)
+
+  
+
+class GetAllVendorsName(APIView):
+    def get_all_vendName(self,request,vid):
+        get_all_vendors = list(Vendor.objects.filter(vid=vid).values())
+        
+        return JsonResponse(get_all_vendors, safe=False)
+    def get(self, request, *args, **kwargs):
+        return self.get_all_vendName(request, *args, **kwargs)
+
+  
+
+
+
+
+
+
 
 
 
