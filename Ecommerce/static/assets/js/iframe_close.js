@@ -18,8 +18,11 @@
         
             button.on("click", function() {
                 closePopup();
-            
+           
                 });
         } else {
-
+            add_button_in_iframe=window.document.getElementById("prod_ven")
+            add_button_in_iframeon("click", function() {
+                  alert("You Cannot Add This Is Virtual Page To Show Your Intresting Product");
+            });
         }

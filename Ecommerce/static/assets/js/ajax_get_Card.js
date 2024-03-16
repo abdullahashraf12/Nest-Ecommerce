@@ -12,8 +12,8 @@ function myFunction() {
                 var csrftoken = getCookie('csrftoken');
 
                 var userOrderCards = JSON.parse(response2.prod_card);
-                $("#Shopping_card").empty();
-                $("#number_of_products_in_card").html(userOrderCards.length);
+                $("ul[name=Shopping_card]").empty();
+                $("span[name=number_of_products_in_card]").html(userOrderCards.length);
                 var price =0;
                 for (var i = 0; i < userOrderCards.length; i++) {
                     var userOrderCard = userOrderCards[i];
@@ -47,10 +47,10 @@ function myFunction() {
                 
 
                 
-                    $('#Shopping_card').append(liHtml);
+                    $('ul[name=Shopping_card]').append(liHtml);
                 }
-                $("#total_product_price_card").empty()
-                $("#total_product_price_card").html("$"+price.toString())
+                $("span[name=total_product_price_card]").empty()
+                $("span[name=total_product_price_card]").html("$"+price.toString())
             } catch (error) {
                 console.error("Error parsing response:", error);
             }
