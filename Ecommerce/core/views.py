@@ -436,6 +436,7 @@ def wishlist(request):
         wishlist = WishList.objects.filter(
                     Q(user__email=request.user.email)
                 )
+        wishlist=wishlist.select_related('product')
         context={
             "wishlist":wishlist
         }

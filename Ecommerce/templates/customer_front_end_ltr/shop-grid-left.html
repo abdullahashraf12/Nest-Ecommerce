@@ -127,7 +127,7 @@
                                     <div class="product-category">
                                         <a href="shop-grid-right.html">Snack</a>
                                     </div>
-                                    <h2><a href="shop-product-right.html">Seeds of Change Organic Quinoe</a></h2>
+                                    <h2><a href="{% url 'core:get_products' i.pid %}">{{ i.title }}</a></h2>
                                     <div class="product-rate-cover">
                                         <div class="product-rate d-inline-block">
                                             <div class="product-rating" style="width: 90%"></div>
@@ -135,7 +135,7 @@
                                         <span class="font-small ml-5 text-muted"> (4.0)</span>
                                     </div>
                                     <div>
-                                        <span class="font-small text-muted">By <a href="vendor-details-1.html">NestFood</a></span>
+                                        <span class="font-small text-muted">By <a href="vendor-details-1.html">{{i.vendor.title}}</a></span>
                                     </div>
                                     <div class="product-card-bottom">
                                         <div class="product-price">
