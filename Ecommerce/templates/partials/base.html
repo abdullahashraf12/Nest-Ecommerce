@@ -155,19 +155,71 @@
                                         </select>
                                     </form>
                                 </div>
-                                <div class="header-action-icon-2">
+                                <!-- <div class="header-action-icon-2">
                                     <a href="shop-compare.html">
                                         <img class="svgInject" alt="Nest" src="{% static 'assets/imgs/theme/icons/icon-compare.svg' %}" />
                                         <span class="pro-count blue">3</span>
                                     </a>
                                     <a href="shop-compare.html"><span class="lable ml-0">Compare</span></a>
-                                </div>
+                                </div> -->
                                 <div class="header-action-icon-2">
-                                    <a href="{% url 'core:wishlist' %}">
+                
+                                
+
+
+                                    <a class="icon-change" href="{% url 'core:wishlist' %}">
                                         <img class="svgInject" alt="Nest" src="{% static 'assets/imgs/theme/icons/icon-heart.svg' %}" />
-                                        <span class="pro-count blue">6</span>
+                                        <span class="pro-count blue" name="number_of_products_in_card_wish">0</span>
                                     </a>
-                                    <a href="{% url 'core:wishlist' %}"><span class="lable">Wishlist</span></a>
+                                    <a href="{% url 'core:wishlist' %}"><span class="lable">Wishlist</span></a> -->
+                                    <div class="cart-dropdown-wrap cart-dropdown-hm2">
+                                        <ul name="Shopping_card_wish">
+
+                                        </ul>
+
+                                        <div class="shopping-cart-footer">
+                                            {% if request.user.is_authenticated %}
+
+                                            <div class="shopping-cart-total">
+
+                                                <h4>Total <span name="total_product_price_card_wish">$0.00</span></h4>
+                                            </div>
+                                            <div class="shopping-cart-button">
+                                                <a href="{% url 'core:wishlist' %}" class="outline">View WishList</a>
+                                            </div>
+                                            {% else %}
+                                            <div class="shopping-cart-total">
+
+                                                <h4><span style="margin-right: 70px;">Nothing To Show</span></h4>
+                                            </div>
+                                            {% endif %}
+
+                                        </div>
+                                    </div>
+                                    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                
+                                
+                                
+                                
                                 </div>
                                 <div class="header-action-icon-2">
                                     <a class="mini-cart-icon" href="{% url 'core:show_card' %}">
@@ -177,39 +229,16 @@
                                     <a href="{% url 'core:show_card' %}"><span class="lable">Cart</span></a>
                                     <div class="cart-dropdown-wrap cart-dropdown-hm2">
                                         <ul name="Shopping_card">
-                                            <!-- <li> -->
-                                                
-                                                <!-- <div class="shopping-cart-img">
-                                                    <a href="shop-product-right.html"><img alt="Nest" src="Put image here" /></a>
-                                                </div>
-                                                <div class="shopping-cart-title">
-                                                    <h4><a href="shop-product-right.html">put title here</a></h4>
-                                                    <h4><span>1 × </span>put price here</h4>
-                                                </div>
-                                                <div class="shopping-cart-delete">
-                                                    <a href="#"><i class="fi-rs-cross-small"></i></a>
-                                                </div>
-                                            </li> -->
+                                
                                         </ul>
 
-                                            <!-- <li>
-                                                <div class="shopping-cart-img">
-                                                    <a href="shop-product-right.html"><img alt="Nest" src="{% static 'assets/imgs/shop/thumbnail-2.jpg' %}" /></a>
-                                                </div>
-                                                <div class="shopping-cart-title">
-                                                    <h4><a href="shop-product-right.html">Corduroy Shirts</a></h4>
-                                                    <h4><span>1 × </span>$3200.00</h4>
-                                                </div>
-                                                <div class="shopping-cart-delete">
-                                                    <a href="#"><i class="fi-rs-cross-small"></i></a>
-                                                </div>
-                                            </li> -->
+   
                                         <div class="shopping-cart-footer">
                                             {% if request.user.is_authenticated %}
 
                                             <div class="shopping-cart-total">
 
-                                                <h4>Total <span name="total_product_price_card">$0.00</span></h4>
+                                                <!-- <h4>Total <span name="total_product_price_card">$0.00</span></h4> -->
                                             </div>
                                             <div class="shopping-cart-button">
                                                 <a href="{% url 'core:show_card' %}" class="outline">View cart</a>
@@ -829,7 +858,8 @@
     <script src="{% static 'assets/js/ajax_get_Card.js' %}"></script>
     <script src="{% static 'assets/js/delete_from_card.js' %}"></script>
     <script src="{% static 'assets/js/add_wishlist.js' %}"></script>
-    
+    <script src="{% static 'assets/js/get_product_wishlist.js' %}"></script>
+    <script src="{% static 'assets/js/delete_from_wish.js' %}"></script>
 </body>
 
 </html>

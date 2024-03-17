@@ -10,29 +10,31 @@ function myFunction() {
         success: function(response2) {
             try {
                 var csrftoken = getCookie('csrftoken');
+                console.log(response2);
 
                 var userOrderCards = JSON.parse(response2.prod_card);
-                $("ul[name=Shopping_card]").empty();
-                $("span[name=number_of_products_in_card]").html(userOrderCards.length);
+                console.log(userOrderCards);
+                $("ul[name=Shopping_card_wish]").empty();
+                $("span[name=number_of_products_in_card_wish]").html(userOrderCards.length);
                 var price =0;
                 for (var i = 0; i < userOrderCards.length; i++) {
+                    console.log(userOrderCards[i].id)
                     var userOrderCard = userOrderCards[i];
-                    console.log(userOrderCard);
-                    console.log(userOrderCard.uoc_prod__image.url);
-                    price += parseFloat(userOrderCard.uoc_prod__price); // Use parseFloat to ensure proper addition
+                    // console.log(prod_card);
+                    // console.log(userOrderCard.uoc_prod__image.url);
+                    price += parseFloat(userOrderCard.product__price); // Use parseFloat to ensure proper addition
                     var liHtml = '<li>' +
                     '<div class="shopping-cart-img">' +
-                    '<a href="/get_products/' + userOrderCard.uoc_prod__pid + '"><img alt="Nest" src="/media/' + userOrderCard.uoc_prod__image + '" /></a>' +
+                    '<a href="/get_products/' + userOrderCard.product__pid + '"><img alt="Nest" src="/media/' + userOrderCard.product__image + '" /></a>' +
                     '</div>' +
                     '<div class="shopping-cart-title">' +
-                    '<h4><a href="/get_products/' + userOrderCard.uoc_prod__pid + '">' + userOrderCard.uoc_prod__title + '</a></h4>' +
-                    '<h4><span>' + userOrderCard.qty + ' × </span>' + userOrderCard.weight + '</h4>' +
+                    '<h4><a href="/get_products/' + userOrderCard.product__pid + '">' + userOrderCard.product__title + '</a></h4>' +
                     '</div>' +
                     '<div class="shopping-cart-delete">' +
-                    '<form class="delete-form" data-pid="' + userOrderCard.uoc_prod__pid + '">' +
+                    '<form class="delete-form" data-pid="' + userOrderCard.product__pid + '">' +
                     '<input type="hidden" name="csrfmiddlewaretoken" value="' + csrftoken + '">' +
                 
-                    '<button type="button" class="delete-button" style="background-color: red; ' +
+                    '<button type="button" class="delete-button_wish" style="background-color: red; ' +
                     'border: 1px solid red; ' +
                     'color: #fff; ' +
                     'font-size: 16px; ' +
@@ -46,12 +48,13 @@ function myFunction() {
                 
 
                 
-                    $('ul[name=Shopping_card]').append(liHtml);
+                    $('ul[name=Shopping_card_wish]').append(liHtml);
                 }
-                $("span[name=total_product_price_card]").empty()
-                $("span[name=total_product_price_card]").html("$"+price.toString())
+                $("span[name=total_product_price_card_wish]").empty()
+                $("span[name=total_product_price_card_wish]").html("$"+price.toString())
             } catch (error) {
-                console.error("Error parsing response:", error);
+                console.log(error)
+                // console.error("Error parsing response:", error);
             }
         },
         error: function(xhr, textStatus, errorThrown) {

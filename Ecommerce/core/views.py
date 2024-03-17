@@ -253,6 +253,69 @@ class RemoveFromCardView(APIView):
 
 
 
+
+
+
+
+
+
+
+class RemoveFromWishCardView(APIView):
+    def remove_wishcard_post(self, request):
+        try:
+            email = request.user.email
+            pid = request.data.get('pid')
+            print("Removing In Progress")
+
+            # Assuming 'pid' is unique for products, you may need to handle multiple instances if not unique
+            user_order_cards = WishList.objects.filter(
+                Q(user__email=email) & Q(product__pid=pid)
+            )
+            if user_order_cards.exists():
+                user_order_cards.delete()
+                prod_Delete_stat = "Success"
+                print("items should be removed")
+
+                return Response({"Product_Delete_Status": prod_Delete_stat})
+            else:
+                prod_Delete_stat = "Failed"
+                return Response({"Product_Delete_Status": prod_Delete_stat + " Product Is Not In The Cart"})
+                
+        except Exception as e:
+            return Response({"error": str(e)}, status=400)
+        
+    def post(self, request, *args, **kwargs):
+        return self.remove_wishcard_post(request, *args, **kwargs)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 class AddToWishCardView(APIView):
     def add_to_Wishcard_post(self, request):
         pid = request.data.get('pid')
@@ -290,13 +353,16 @@ class AddToWishCardView(APIView):
     def add_to_Wishcard_get(self, request):
         try:
             email = request.user.email
-            user_order_cards_all = UserOrderCard.objects.filter(
+            user_order_cards_all = WishList.objects.filter(
                 user__email=email
             )
+
             
             # Select specific fields from the related Products model
-            user_order_cards_all = WishList.select_related('product')
-            user_order_cards_data = WishList.values(
+            user_order_cards_all = user_order_cards_all.select_related('product')
+            print(user_order_cards_all)
+
+            user_order_cards_data = user_order_cards_all.values(
                 'id',
                 'user__email',
                 'product__title',
@@ -305,7 +371,6 @@ class AddToWishCardView(APIView):
                 'product__pid',
 
             )
-            
             # Convert the values queryset to a list of dictionaries
             user_order_cards_list = list(user_order_cards_data)
             
@@ -322,30 +387,30 @@ class AddToWishCardView(APIView):
     def post(self, request, *args, **kwargs):
         return self.add_to_Wishcard_post(request, *args, **kwargs)
 
-class WishCardView(APIView):
-    def remove_card_post(self, request):
-        try:
-            email = request.user.email
-            pid = request.data.get('pid')
+# class WishCardView(APIView):
+#     def remove_card_post(self, request):
+#         try:
+#             email = request.user.email
+#             pid = request.data.get('pid')
             
-            # Assuming 'pid' is unique for products, you may need to handle multiple instances if not unique
-            user_order_cards = UserOrderCard.objects.filter(
-                Q(user__email=email) & Q(uoc_prod__pid=pid)
-            )
+#             # Assuming 'pid' is unique for products, you may need to handle multiple instances if not unique
+#             user_order_cards = UserOrderCard.objects.filter(
+#                 Q(user__email=email) & Q(uoc_prod__pid=pid)
+#             )
             
-            if user_order_cards.exists():
-                user_order_cards.delete()
-                prod_Delete_stat = "Success"
-                return Response({"Product_Delete_Status": prod_Delete_stat})
-            else:
-                prod_Delete_stat = "Failed"
-                return Response({"Product_Delete_Status": prod_Delete_stat + " Product Is Not In The Cart"})
+#             if user_order_cards.exists():
+#                 user_order_cards.delete()
+#                 prod_Delete_stat = "Success"
+#                 return Response({"Product_Delete_Status": prod_Delete_stat})
+#             else:
+#                 prod_Delete_stat = "Failed"
+#                 return Response({"Product_Delete_Status": prod_Delete_stat + " Product Is Not In The Cart"})
                 
-        except Exception as e:
-            return Response({"error": str(e)}, status=400)
+#         except Exception as e:
+#             return Response({"error": str(e)}, status=400)
         
-    def post(self, request, *args, **kwargs):
-        return self.remove_card_post(request, *args, **kwargs)
+#     def post(self, request, *args, **kwargs):
+#         return self.remove_card_post(request, *args, **kwargs)
  
 
 
