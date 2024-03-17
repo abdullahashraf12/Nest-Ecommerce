@@ -75,7 +75,7 @@ $(document).ready(function() {
                     data: {
                         pid: form.find('[name="product_pid_to_card"]').val(),
                         qty: "1",
-                        size: ""
+                        size: "50g"
                     },
                     dataType: 'json',
                     beforeSend: function(xhr) {
