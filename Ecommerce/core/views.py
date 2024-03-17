@@ -245,6 +245,127 @@ class RemoveFromCardView(APIView):
         return self.remove_card_post(request, *args, **kwargs)
  
 
+
+
+
+
+
+
+
+
+class AddToWishCardView(APIView):
+    def add_to_Wishcard_post(self, request):
+        pid = request.data.get('pid')
+ 
+        try:
+            email = request.user.email
+            pid = request.data.get('pid')
+
+            print("i am here 1")
+            # Assuming 'pid' is unique for products, you may need to handle multiple instances if not unique
+            user_order_cards = WishList.objects.filter(
+                Q(user__email=email) & Q(product__pid=pid)
+            )
+           
+            if user_order_cards.exists():
+                # Update the quantity and size fields of existing UserOrderCard instances
+                # for user_order_card in user_order_cards:
+                #     user_order_card.save()
+
+                # # Assuming you only want to return the uoc_id of the first matching UserOrderCard instance
+                # uoc_id = user_order_cards.first().id
+                print(pid)
+                return Response({"prod_card": "Product Already Exists"})
+            else:
+                    card = WishList(user=request.user, product=Products.objects.get(pid=pid))
+                    card.save()
+                    return Response({"message": "Product Added Sucessfully"})
+               
+        except Exception as e:
+            print(pid)
+
+            print("i am here 2 ")
+            print(e)
+            return Response({"error": str(e)}, status=400)
+    def add_to_Wishcard_get(self, request):
+        try:
+            email = request.user.email
+            user_order_cards_all = UserOrderCard.objects.filter(
+                user__email=email
+            )
+            
+            # Select specific fields from the related Products model
+            user_order_cards_all = WishList.select_related('product')
+            user_order_cards_data = WishList.values(
+                'id',
+                'user__email',
+                'product__title',
+                'product__price',
+                'product__image',
+                'product__pid',
+
+            )
+            
+            # Convert the values queryset to a list of dictionaries
+            user_order_cards_list = list(user_order_cards_data)
+            
+            # Use JSON encoder to serialize the list of dictionaries
+            serialized_data = json.dumps(user_order_cards_list, cls=DjangoJSONEncoder)
+            
+            return JsonResponse({"prod_card": serialized_data}, safe=False)
+        except Exception as e:
+            return JsonResponse({"prod_card": ""}, safe=False)
+
+    def get(self, request, *args, **kwargs):
+        return self.add_to_Wishcard_get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        return self.add_to_Wishcard_post(request, *args, **kwargs)
+
+class WishCardView(APIView):
+    def remove_card_post(self, request):
+        try:
+            email = request.user.email
+            pid = request.data.get('pid')
+            
+            # Assuming 'pid' is unique for products, you may need to handle multiple instances if not unique
+            user_order_cards = UserOrderCard.objects.filter(
+                Q(user__email=email) & Q(uoc_prod__pid=pid)
+            )
+            
+            if user_order_cards.exists():
+                user_order_cards.delete()
+                prod_Delete_stat = "Success"
+                return Response({"Product_Delete_Status": prod_Delete_stat})
+            else:
+                prod_Delete_stat = "Failed"
+                return Response({"Product_Delete_Status": prod_Delete_stat + " Product Is Not In The Cart"})
+                
+        except Exception as e:
+            return Response({"error": str(e)}, status=400)
+        
+    def post(self, request, *args, **kwargs):
+        return self.remove_card_post(request, *args, **kwargs)
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 def wishlist(request):
     if request.user.is_authenticated:
         wishlist = WishList.objects.filter(

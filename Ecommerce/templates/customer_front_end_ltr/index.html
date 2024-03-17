@@ -344,6 +344,9 @@
                         </li>
                     </ul>
                 </div>
+                <div id="Add_To_Prod_Status"></div>
+                <div id="Add_To_Prod_wish_list_Status"></div>
+
                 <!--End nav-tabs-->
                 <div class="tab-content" id="myTabContent">
                     <div class="tab-pane fade show active" id="tab-one" role="tabpanel" aria-labelledby="tab-one">
@@ -376,12 +379,33 @@
                                             </a>
                                         </div>
                                         <div class="product-action-1">
-                                            <a aria-label="Add To Wishlist" class="action-btn" href="shop-wishlist.html"><i class="fi-rs-heart"></i></a>
-                                            <a aria-label="Quick view" class="action-btn open_iframe" data-src="{% url 'core:get_products' p.pid %}"><i class="fi-rs-eye"></i></a>
+               
+                                            <!-- <a aria-label="Add To Wishlist" class="action-btn" href="shop-wishlist.html"><i class="fi-rs-heart"></i></a> -->
+                                            <!-- <a aria-label="Quick view" class="action-btn open_iframe" data-src="{% url 'core:get_products' p.pid %}"><i class="fi-rs-eye"></i></a> -->
+                                            <!-- <form method="POST">
+                                                {% csrf_token %}
 
+                                                <input name="product_pid_to_card" value="{{ p.pid }}" hidden/>
+                                                <a type="submit" aria-label="Add To Wishlist" class="action-btn" name="add_to_wishcard"><i class="fi-rs-heart"></i></a>
 
-
-                                             
+                                            </form> -->
+                                            <div style="display: flex;">
+                                                <a aria-label="Quick view" class="action-btn open_iframe" data-src="{% url 'core:get_products' p.pid %}">
+                                                    <i class="fi-rs-eye"></i>
+                                                </a>
+                                            
+                                                <form method="POST">
+                                                    {% csrf_token %}
+                                                    <input name="product_pid_to_card" value="{{ p.pid }}" hidden/>
+                                                    <a type="submit" aria-label="Add To Wishlist" class="action-btn" name="add_to_wishcard">
+                                                        <i class="fi-rs-heart"></i>
+                                                    </a>
+                                                </form>
+                                                
+                                            </div>
+                                            
+                                            
+                                            
                                         </div>
                                         <div class="product-badges product-badges-position product-badges-mrg">
                                             <span class="hot">-{{p.precentage|floatformat}}%</span>
