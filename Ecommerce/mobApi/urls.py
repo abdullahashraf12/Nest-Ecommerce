@@ -12,6 +12,7 @@ urlpatterns = [
 path("a_p/",GetAllProducts.as_view(),name="get_all_products"),
 path("a_c/",GetAllCategories.as_view(),name="get_all_categs"),
 path("a_v/",GetAllVendors.as_view(),name="get_all_vendors"),
+
 path("a_p/<pid>",GetAllProductsName.as_view(),name="get_all_products_by_id"),
 path("a_c/<cid>",GetAllCategoriesName.as_view(),name="get_all_categs_by_id"),
 path("a_v/<vid>",GetAllVendorsName.as_view(),name="get_all_vendors_by_id"),

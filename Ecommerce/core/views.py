@@ -108,7 +108,23 @@ def get_products_name(request):
 
 def show_card(request):
     if request.user.is_authenticated:
-        return render(request, template_name="customer_front_end_ltr/shop-cart.html")
+        email = request.user.email
+        user_order_cards = UserOrderCard.objects.filter(
+                Q(user__email=email)
+            ).select_related('uoc_prod')
+        user_order_cards_data = user_order_cards.values(
+            
+                'uoc_prod__title',
+                'uoc_prod__price',
+                'uoc_prod__image',
+                'uoc_prod__pid',
+                'qty',
+                'weight'
+            )
+        context={
+            "client_card":user_order_cards_data
+            }
+        return render(request, template_name="customer_front_end_ltr/shop-cart.html",context=context)
     else:
         return redirect("userauths:sign-in")
 
