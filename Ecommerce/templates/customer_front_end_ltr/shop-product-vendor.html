@@ -34,6 +34,9 @@
             </div>
         </div>
     </div>
+    <div id="Add_To_Prod_Status"></div>
+    <div id="Add_To_Prod_wish_list_Status"></div>
+
     <div class="container mb-30">
         <div class="row">
             <div class="col-xl-11 col-lg-12 m-auto">
@@ -118,9 +121,21 @@
                                                 <input name="product_pid_to_card" value="{{ product.pid }}" hidden/>
                                                 <button type="submit" name="prod_ven" class="button button-add-to-cart"><i class="fi-rs-shopping-cart"></i>Add to cart</button>
                                             </form>
-                                                <a aria-label="Add To Wishlist" class="action-btn hover-up" href="shop-wishlist.html"><i class="fi-rs-heart"></i></a>
-                                                <a aria-label="Compare" class="action-btn hover-up" href="shop-compare.html"><i class="fi-rs-shuffle"></i></a>
+                                            <div style="display: flex;">
+                                                <a aria-label="Quick view" class="action-btn open_iframe" data-src="{% url 'core:get_products' product.pid %}">
+                                                    <i class="fi-rs-eye"></i>
+                                                </a>
+                                            
+                                                <form method="POST">
+                                                    {% csrf_token %}
+                                                    <input name="product_pid_to_card" value="{{ product.pid }}" hidden/>
+                                                    <a type="submit" aria-label="Add To Wishlist" class="action-btn" name="add_to_wishcard">
+                                                        <i class="fi-rs-heart"></i>
+                                                    </a>
+                                                </form>
                                                 
+                                            </div>
+                                            
                                             </div>
                                         </div>
                                         <div class="font-xs">
@@ -457,6 +472,7 @@
                                 <div class="col-12">
                                     <h2 class="section-title style-1 mb-30">Related products</h2>
                                 </div>
+                                
                                 <div class="col-12">
                                     <div class="row related-products">
                                         {% for i  in related_products %}
@@ -470,11 +486,23 @@
                                                         </a>
                                                     </div>
                                                     <div class="product-action-1">
-                                                        <a aria-label="Quick view" class="action-btn small hover-up" data-bs-toggle="modal" data-bs-target="#quickViewModal"><i class="fi-rs-search"></i></a>
-                                                        <a aria-label="Add To Wishlist" class="action-btn small hover-up" href="shop-wishlist.html" tabindex="0"><i class="fi-rs-heart"></i></a>
-                                                        <a aria-label="Compare" class="action-btn small hover-up" href="shop-compare.html" tabindex="0"><i class="fi-rs-shuffle"></i></a>
-                                                        <a aria-label="Quick view" class="action-btn open_iframe" data-src="{% url 'core:get_products' i.pid %}"><i class="fi-rs-eye"></i></a>
-
+                                                                  
+                                    <div style="display: flex;">
+                                        <a aria-label="Quick view" class="action-btn open_iframe" data-src="{% url 'core:get_products' i.pid %}">
+                                            <i class="fi-rs-eye"></i>
+                                        </a>
+                                    
+                                        <form method="POST">
+                                            {% csrf_token %}
+                                            <input name="product_pid_to_card" value="{{ i.pid }}" hidden/>
+                                            <a type="submit" aria-label="Add To Wishlist" class="action-btn" name="add_to_wishcard">
+                                                <i class="fi-rs-heart"></i>
+                                            </a>
+                                        </form>
+                                        
+                                    </div>
+                                    
+                            
                                                     </div>
                                                     <div class="product-badges product-badges-position product-badges-mrg">
                                                         <span class="hot">{{ i.precentage|floatformat }}</span>
@@ -489,7 +517,30 @@
                                                         <span>${{i.price}} </span>
                                                         <span class="old-price">${{i.old_Price}}</span>
                                                     </div>
+
+
+                                                    <div class="product-card-bottom">
+                                                      
+                                                        <div class="add-cart">
+                                                            <form method="POST">
+                                                                {% csrf_token %}
+                                                                <input name="prod_quantity_n" value="1" hidden="hidden"/>
+                                                                <input name="product_pid_to_card" value="{{ p.pid }}" hidden/>
+                                                                <button type="submit" name="prod_ven" class="prod_ven add" style="color: #dc3545;"><i class="fi-rs-shopping-cart mr-5" style="color: blueviolet;"></i>Add</button>
+                                                            </form>
+                                                            
+                                                        </div>
+                                                    </div>
+
+
+
                                                 </div>
+
+
+
+
+
+                                                
                                             </div>
                                         </div>
                                         {% endfor %}

@@ -84,6 +84,11 @@
                             </div>
                         </div>
                     </div>
+
+
+                    <div id="Add_To_Prod_Status"></div>
+                    <div id="Add_To_Prod_wish_list_Status"></div>
+    
                     <div class="row product-grid">
                         {% for i in products %}
                         <div class="col-lg-1-5 col-md-4 col-12 col-sm-6">
@@ -96,9 +101,23 @@
                                         </a>
                                     </div>
                                     <div class="product-action-1">
-                                        <a aria-label="Add To Wishlist" class="action-btn" href="shop-wishlist.html"><i class="fi-rs-heart"></i></a>
-                                        <a aria-label="Compare" class="action-btn" href="shop-compare.html"><i class="fi-rs-shuffle"></i></a>
-                                        <a aria-label="Quick view" class="action-btn open_iframe" data-src="{% url 'core:get_products' i.pid %}"><i class="fi-rs-eye"></i></a>
+                                    
+                                        <div style="display: flex;">
+                                            <a aria-label="Quick view" class="action-btn open_iframe" data-src="{% url 'core:get_products' i.pid %}">
+                                                <i class="fi-rs-eye"></i>
+                                            </a>
+                                        
+                                            <form method="POST">
+                                                {% csrf_token %}
+                                                <input name="product_pid_to_card" value="{{ i.pid }}" hidden/>
+                                                <a type="submit" aria-label="Add To Wishlist" class="action-btn" name="add_to_wishcard">
+                                                    <i class="fi-rs-heart"></i>
+                                                </a>
+                                            </form>
+                                            
+                                        </div>
+                                        
+                                    
                                     </div>
                                     <div class="product-badges product-badges-position product-badges-mrg">
                                         <span class="hot">-{{i.precentage|floatformat}}%</span>
@@ -124,7 +143,20 @@
                                             <span class="old-price">${{i.old_Price}}</span>
                                         </div>
                                         <div class="add-cart">
-                                            <a class="add" href="shop-cart.html"><i class="fi-rs-shopping-cart mr-5"></i>Add </a>
+                                    
+                                            <div class="product-card-bottom">
+                                                      
+                                                <div class="add-cart">
+                                                    <form method="POST">
+                                                        {% csrf_token %}
+                                                        <input name="prod_quantity_n" value="1" hidden="hidden"/>
+                                                        <input name="product_pid_to_card" value="{{ i.pid }}" hidden/>
+                                                        <button type="submit" name="prod_ven" class="prod_ven add" style="color: #dc3545;"><i class="fi-rs-shopping-cart mr-5" style="color: blueviolet;"></i>Add</button>
+                                                    </form>
+                                                    
+                                                </div>
+                                            </div>
+                                            <!-- <a class="add" href="shop-cart.html"><i class="fi-rs-shopping-cart mr-5"></i>Add </a> -->
                                         </div>
                                     </div>
                                 </div>

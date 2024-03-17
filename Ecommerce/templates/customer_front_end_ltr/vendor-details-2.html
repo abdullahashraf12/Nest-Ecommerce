@@ -76,6 +76,9 @@
                     </div>
                 </div>
             </div>
+            <div id="Add_To_Prod_Status"></div>
+            <div id="Add_To_Prod_wish_list_Status"></div>
+
             <div class="row flex-row-reverse">
                 <div class="col-lg-4-5">
                     <div class="shop-product-fillter">
@@ -136,9 +139,26 @@
                                     </div>
                                 </div>
                                 <div class="product-action-1">
-                                    <a aria-label="Add To Wishlist" class="action-btn" href="shop-wishlist.html"><i class="fi-rs-heart"></i></a>
-                                    <a aria-label="Compare" class="action-btn" href="shop-compare.html"><i class="fi-rs-shuffle"></i></a>
-                                    <a aria-label="Quick view" class="action-btn open_iframe" data-src="{% url 'core:get_products' i.pid %}"><i class="fi-rs-eye"></i></a>
+                                    
+                                    
+                                    
+                                    <div style="display: flex;">
+                                        <a aria-label="Quick view" class="action-btn open_iframe" data-src="{% url 'core:get_products' i.pid %}">
+                                            <i class="fi-rs-eye"></i>
+                                        </a>
+                                    
+                                        <form method="POST">
+                                            {% csrf_token %}
+                                            <input name="product_pid_to_card" value="{{ i.pid }}" hidden/>
+                                            <a type="submit" aria-label="Add To Wishlist" class="action-btn" name="add_to_wishcard">
+                                                <i class="fi-rs-heart"></i>
+                                            </a>
+                                        </form>
+                                        
+                                    </div>
+                                    
+                                
+                                
                                 </div>
                                 <div class="product-badges product-badges-position product-badges-mrg">
                                     <span class="hot">-{{i.precentage|floatformat}}%</span>
@@ -162,8 +182,23 @@
                                     <span class="old-price">${{i.old_Price}}</span>
                                 </div>
                                 <div class="mt-30 d-flex align-items-center">
-                                    <a aria-label="Buy now" class="btn" href="shop-cart.html"><i class="fi-rs-shopping-cart mr-5"></i>Add to Cart</a>
-                                    <a href="#" class="add-wishlish ml-30 text-body font-sm font-heading font-weight-bold"><i class="fi-rs-shuffle mr-5"></i>Add Compare</a>
+                                    <div class="add-cart">
+                                 
+                                        <div class="product-card-bottom">
+                                                      
+                                            <div class="add-cart">
+                                                <form method="POST">
+                                                    {% csrf_token %}
+                                                    <input name="prod_quantity_n" value="1" hidden="hidden"/>
+                                                    <input name="product_pid_to_card" value="{{ i.pid }}" hidden/>
+                                                    <button type="submit" name="prod_ven" class="prod_ven add" style="color: #dc3545;"><i class="fi-rs-shopping-cart mr-5" style="color: blueviolet;"></i>Add</button>
+                                                </form>
+                                                
+                                            </div>
+                                        </div>
+                                        <!-- <a class="add" href="shop-cart.html"><i class="fi-rs-shopping-cart mr-5"></i>Add </a> -->
+                                    </div>
+                                
                                 </div>
                             </div>
                         </div>
