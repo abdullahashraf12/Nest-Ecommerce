@@ -1,61 +1,58 @@
 $(document).ready(function() {
-    var email = $("#email_exist").val(); // Function to get the CSRF token from the cookie
-
     $("#prod_ven").on("click", function(event) {
-
         event.preventDefault(); // Prevent the default behavior of the button click event
+        
+        var email = $("#email_exist").val(); // Function to get the CSRF token from the cookie
 
         if (!email || !email.trim() || !email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
-            {
-                alert("You Cannot Add To Card Please LogIn First");
-            }
+            alert("You Cannot Add To Card Please LogIn First");
         } else {
-
             var csrftoken = getCookie('csrftoken');
-            // Get the list of options
             var sizeList = document.querySelector('.size-filter');
-
-            // Find the active option
             var activeOption = sizeList.querySelector('li.active');
-
-            // Get the text content of the active option
             var activatedOption = activeOption.querySelector('a').textContent;
 
-            // Log the activated option
             console.log("Activated option:", activatedOption);
+            
             $.ajax({
-                url: "/add_to_card/", // Make sure the URL is correct
-                method: "POST", // Specify the request method
+                url: "/add_to_card/",
+                method: "POST",
                 data: {
                     pid: $('[name="product_pid_to_card"]').val(),
                     qty: $('[name="prod_quantity_n"]').val(),
-                    size:activatedOption
+                    size: activatedOption
                 },
                 dataType: 'json',
                 beforeSend: function(xhr) {
-                    xhr.setRequestHeader("X-CSRFToken", csrftoken); // Set the CSRF token in the request header
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
                     console.log("Adding Products to Card")
                 },
                 success: function(response2) {
-          console.log("product added or modified")
+                    console.log("product added or modified");
+                    $("#Add_To_Prod_Status").empty();
 
+                    // Set the HTML for the alert
+                    $("#Add_To_Prod_Status").html('<div class="alert alert-success" style="margin-left: 100px; width: 800px;" role="alert">Product Has Been Added Or Modified Sucessfully!</div>');
 
-
-                    
-                    
+                    // Set a timeout to remove the alert after 2.5 seconds
+                    setTimeout(function() {
+                        $("#Add_To_Prod_Status").empty();
+                    }, 2500); // 2500 milliseconds = 2.5 seconds
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    // console.error("Error:", textStatus, errorThrown);
                     var errorResponse = JSON.parse(xhr.responseText);
-                    alert(errorResponse.error); // Log the specific error message
-                               
+                    // alert(errorResponse.error); // Log the specific error message
+
+                    $("#Add_To_Prod_Status").empty();
+
+                    $("#Add_To_Prod_Status").html('<div class="alert alert-danger" role="alert" style="margin-left: 800px; width: 500px;>Error Has Happened '+errorResponse+'!</div>');
+
+                    // Set a timeout to remove the alert after 2.5 seconds
+                    setTimeout(function() {
+                        $("#Add_To_Prod_Status").empty();
+                    }, 2500); 
                 }
             });
-
-
-
-
-
         }
     });
 });
@@ -67,7 +64,6 @@ function getCookie(name) {
         var cookies = document.cookie.split(';');
         for (var i = 0; i < cookies.length; i++) {
             var cookie = cookies[i].trim();
-            // Does this cookie string begin with the name we want?
             if (cookie.substring(0, name.length + 1) === (name + '=')) {
                 cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
                 break;
