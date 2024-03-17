@@ -116,7 +116,7 @@
                                                 <form method="POST">
                                                 {% csrf_token %}
                                                 <input name="product_pid_to_card" value="{{ product.pid }}" hidden/>
-                                                <button type="submit" id="prod_ven" class="button button-add-to-cart"><i class="fi-rs-shopping-cart"></i>Add to cart</button>
+                                                <button type="submit" name="prod_ven" class="button button-add-to-cart"><i class="fi-rs-shopping-cart"></i>Add to cart</button>
                                             </form>
                                                 <a aria-label="Add To Wishlist" class="action-btn hover-up" href="shop-wishlist.html"><i class="fi-rs-heart"></i></a>
                                                 <a aria-label="Compare" class="action-btn hover-up" href="shop-compare.html"><i class="fi-rs-shuffle"></i></a>

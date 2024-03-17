@@ -1,6 +1,6 @@
 from django.shortcuts import render ,redirect
 from rest_framework.response import Response
-from core.models import Products,Category,Vendor,CardOrder,CardOrderItems,ProductImages,ProductReview,WishList,Address,Tags,UserOrderCard
+from core.models import Products,Category,Vendor,CardOrder,CardOrderItems,ProductImages,ProductReview,WishList,Address,Tags,UserOrderCard,WishList
 from rest_framework.views import APIView
 from rest_framework import status
 from django.db.models import Q
@@ -134,12 +134,15 @@ def show_card(request):
 
 class AddToCardView(APIView):
     def add_to_card_post(self, request):
+        pid = request.data.get('pid')
+        qty = request.data.get('qty')
+        size = request.data.get('size')
         try:
             email = request.user.email
             pid = request.data.get('pid')
             qty = request.data.get('qty')
             size = request.data.get('size')
-
+            print("i am here 1")
             # Assuming 'pid' is unique for products, you may need to handle multiple instances if not unique
             user_order_cards = UserOrderCard.objects.filter(
                 Q(user__email=email) & Q(uoc_prod__pid=pid)
@@ -157,13 +160,28 @@ class AddToCardView(APIView):
                 uoc_id = user_order_cards.first().uoc_id
                 return Response({"prod_card": uoc_id})
             else:
-                if qty is not None:  # Ensure qty is not None before creating the UserOrderCard instance
+                print("i am here 44")
+
+                if qty is not None or qty != "": 
+                    print("i am here 33")
+                    
+                    # Ensure qty is not None before creating the UserOrderCard instance
                     card = UserOrderCard(user=request.user, uoc_prod=Products.objects.get(pid=pid), qty=qty, weight=size)
                     card.save()
                     return Response({"message": "No matching product in the user's order card."})
+                
                 else:
+                    print("i am here 22")
+                    print(pid)
+                    print(qty)
+                    print(size)
                     return Response({"error": "Quantity cannot be empty."}, status=400)
         except Exception as e:
+            print(pid)
+            print(qty)
+            print(size)
+            print("i am here 2 ")
+            print(e)
             return Response({"error": str(e)}, status=400)
     def add_to_card_get(self, request):
         try:
@@ -227,7 +245,17 @@ class RemoveFromCardView(APIView):
         return self.remove_card_post(request, *args, **kwargs)
  
 
-
+def wishlist(request):
+    if request.user.is_authenticated:
+        wishlist = WishList.objects.filter(
+                    Q(user__email=request.user.email)
+                )
+        context={
+            "wishlist":wishlist
+        }
+        return render(request=request,template_name="customer_front_end_ltr/shop-wishlist.html",context=context)
+    else:
+        return render(request=request,template_name="customer_front_end_ltr/shop-wishlist.html")
 
 
 # def add_to_card(request):
