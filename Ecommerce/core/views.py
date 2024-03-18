@@ -1,6 +1,6 @@
 from django.shortcuts import render ,redirect
 from rest_framework.response import Response
-from core.models import Products,Category,Vendor,CardOrder,CardOrderItems,ProductImages,ProductReview,WishList,Address,Tags,UserOrderCard,WishList
+from core.models import Products,Category,Vendor,CardOrder,CardOrderItems,ProductImages,ProductReview,WishList,Address,Tags,UserOrderCard,WishList,ProductReview
 from rest_framework.views import APIView
 from rest_framework import status
 from django.db.models import Q
@@ -292,6 +292,41 @@ class RemoveFromWishCardView(APIView):
 
 
 
+class AddReview(APIView):
+    def postAddReview(self,request):
+        try:
+            email = request.user.email
+            pid = request.data.get('pid')
+            starRating = request.data.get("starRating")
+            user_comment= request.data.get("user_comment")
+            checkReviewExist = ProductReview.objects.filter(
+                Q(user__email = email) & Q(product__pid=pid)
+            )
+            if checkReviewExist.exists():
+                return Response({"Error": "You ALready Commented"},)
+            else:
+                checkReviewExist = ProductReview(user=request.user,product=Products.objects.get(pid=pid))
+                checkReviewExist.save()
+                return Response({"commentSaved": "Commented Sucessfully"},)
+
+        except Exception as e:
+            return Response({"error": str(e)}, status=400)
+    def getReview(self,request):
+        try:
+            comments=list(ProductReview.objects.all().values())
+            serialized_data = json.dumps(comments, cls=DjangoJSONEncoder)
+
+            return Response({"comments":serialized_data},safe=False)
+        except Exception as e:
+            return Response({"error": str(e)}, status=400)
+
+
+
+
+    def post(self, request, *args, **kwargs):
+        return self.postAddReview(request, *args, **kwargs)
+    def get(self, request, *args, **kwargs):
+        return self.getReview(request, *args, **kwargs)
 
 
 

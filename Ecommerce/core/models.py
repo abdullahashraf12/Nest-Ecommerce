@@ -149,8 +149,8 @@ class CardOrderItems(models.Model):
 
 
 class ProductReview(models.Model):
-    user= models.ForeignKey(User,on_delete=models.CASCADE)
-    product= models.ForeignKey(Products,on_delete=models.CASCADE)
+    user= models.ForeignKey(User,on_delete=models.CASCADE,related_name="userrev")
+    product= models.ForeignKey(Products,on_delete=models.CASCADE,related_name="prodreview")
     review = models.TextField()
     rating=models.IntegerField(choices=RATING,default= None)
     date= models.DateTimeField(auto_now_add=True)
