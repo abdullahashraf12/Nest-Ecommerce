@@ -336,11 +336,19 @@ class AddReview(APIView):
                 'rating',
                 'date'
             )
+
+            max_percentage = 0
+           
             
             rating_percentages = product.get_rating_percentage()
+            for key, value in rating_percentages.items():
+                if value > max_percentage:
+                    max_percentage = value
+        
             result_data = {
                 "comments": list(review_data),
-                "rating_percentages": rating_percentages
+                "rating_percentages": rating_percentages,
+                'glob_precentage':max_percentage
             }
 
             return JsonResponse(result_data, safe=False)
