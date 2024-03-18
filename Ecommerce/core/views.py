@@ -294,6 +294,12 @@ class RemoveFromWishCardView(APIView):
 
 
 class AddReview(APIView):
+    def post(self, request, *args, **kwargs):
+        return self.postAddReview(request, *args, **kwargs)
+    
+    def get(self, request, *args, **kwargs):
+        return self.getReview(request, *args, **kwargs)
+
     def postAddReview(self, request):
         try:
             email = request.user.email
@@ -317,25 +323,29 @@ class AddReview(APIView):
             print(e)
             return Response({"error": str(e)}, status=400) 
 
-    def getReview(self,request):
+    def getReview(self, request):
         try:
-            comments=list(ProductReview.objects.all().values())
-            serialized_data = json.dumps(comments, cls=DjangoJSONEncoder)
+            pid = request.GET.get('pid')
+            product = Products.objects.get(pid=pid)
+            user_order_cards_all = ProductReview.objects.filter(
+                product__pid=pid
+            )
+            review_data = user_order_cards_all.values(
+                'user__username',
+                'review',
+                'rating',
+                'date'
+            )
+            
+            rating_percentages = product.get_rating_percentage()
+            result_data = {
+                "comments": list(review_data),
+                "rating_percentages": rating_percentages
+            }
 
-            return Response({"comments":serialized_data},safe=False)
+            return JsonResponse(result_data, safe=False)
         except Exception as e:
-            return Response({"error": str(e)}, status=400)
-
-
-
-
-    def post(self, request, *args, **kwargs):
-        return self.postAddReview(request, *args, **kwargs)
-    def get(self, request, *args, **kwargs):
-        return self.getReview(request, *args, **kwargs)
-
-
-
+            return JsonResponse({"error": str(e)}, status=400)
 
 
 

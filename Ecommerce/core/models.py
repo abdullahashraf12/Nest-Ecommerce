@@ -28,6 +28,18 @@ RATING = (
 
 
 
+RATING_CHOICES = [
+    (1, '1 Star'),
+    (2, '2 Stars'),
+    (3, '3 Stars'),
+    (4, '4 Stars'),
+    (5, '5 Stars'),
+    (6, '6 Stars'),
+    (7, '7 Stars'),
+]
+
+
+
 def user_directory_path(instance,filename):
     return 'user_{0}/{1}'.format(instance.user.id,filename)
 
@@ -97,6 +109,32 @@ class Products(models.Model):
     sku=ShortUUIDField(unique=True,length=10,max_length= 20,alphabet="abcdefgh12345")
     date=models.DateTimeField(auto_now_add=True)
     update=models.DateTimeField(null=True,blank=True)
+    def __str__(self):
+        return self.title
+
+    def get_rating_percentage(self):
+        total_ratings = self.prodreview.count()
+        if total_ratings == 0:
+            return {
+                '1_star_percentage': 0,
+                '2_star_percentage': 0,
+                '3_star_percentage': 0,
+                '4_star_percentage': 0,
+                '5_star_percentage': 0,
+                '6_star_percentage': 0,
+                '7_star_percentage': 0,
+            }
+
+        star_counts = {
+            f'{i}_star_count': self.prodreview.filter(rating=i).count() for i in range(1, 8)
+        }
+
+        star_percentages = {
+            f'{i}_star_percentage': (star_counts[f'{i}_star_count'] / total_ratings) * 100 for i in range(1, 8)
+        }
+
+        return star_percentages
+
     class Meta:
         verbose_name_plural = "Products"
     
@@ -156,22 +194,17 @@ class CardOrderItems(models.Model):
 
 
 class ProductReview(models.Model):
-    user= models.ForeignKey(User,on_delete=models.CASCADE,related_name="userrev")
-    product= models.ForeignKey(Products,on_delete=models.CASCADE,related_name="prodreview")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="userrev")
+    product = models.ForeignKey(Products, on_delete=models.CASCADE, related_name="prodreview")
     review = models.TextField()
-    rating=models.IntegerField(choices=RATING,default= None)
-    date= models.DateTimeField(auto_now_add=True)
+    rating = models.IntegerField(choices=RATING_CHOICES, default=None)
+    date = models.DateTimeField(auto_now_add=True)
+
     class Meta:
         verbose_name_plural = "Product Reviews"
-    
+
     def __str__(self):
         return str(self.product.title)
-    def get_rating(self):
-        return self.rating
-    
-
-
-
 
 
 
