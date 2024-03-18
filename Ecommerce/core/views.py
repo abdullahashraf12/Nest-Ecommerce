@@ -292,25 +292,31 @@ class RemoveFromWishCardView(APIView):
 
 
 
+
 class AddReview(APIView):
-    def postAddReview(self,request):
+    def postAddReview(self, request):
         try:
             email = request.user.email
             pid = request.data.get('pid')
-            starRating = request.data.get("starRating")
-            user_comment= request.data.get("user_comment")
+            starRating = request.data.get("stars")
+            user_comment= request.data.get("comment")
             checkReviewExist = ProductReview.objects.filter(
-                Q(user__email = email) & Q(product__pid=pid)
+                Q(user__email=email) & Q(product__pid=pid)
             )
             if checkReviewExist.exists():
-                return Response({"Error": "You ALready Commented"},)
+                return Response({"Error": "You Already Commented"})
             else:
-                checkReviewExist = ProductReview(user=request.user,product=Products.objects.get(pid=pid))
-                checkReviewExist.save()
-                return Response({"commentSaved": "Commented Sucessfully"},)
-
+                new_review = ProductReview.objects.create(
+                    user=request.user,
+                    product=Products.objects.get(pid=pid),
+                    review=user_comment,
+                    rating=starRating
+                )
+                return Response({"commentSaved": "Commented Successfully"})
         except Exception as e:
-            return Response({"error": str(e)}, status=400)
+            print(e)
+            return Response({"error": str(e)}, status=400) 
+
     def getReview(self,request):
         try:
             comments=list(ProductReview.objects.all().values())

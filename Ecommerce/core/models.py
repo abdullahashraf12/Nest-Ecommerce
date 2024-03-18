@@ -148,6 +148,13 @@ class CardOrderItems(models.Model):
 
 
 
+
+
+
+
+
+
+
 class ProductReview(models.Model):
     user= models.ForeignKey(User,on_delete=models.CASCADE,related_name="userrev")
     product= models.ForeignKey(Products,on_delete=models.CASCADE,related_name="prodreview")
@@ -161,6 +168,24 @@ class ProductReview(models.Model):
         return str(self.product.title)
     def get_rating(self):
         return self.rating
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 class WishList(models.Model):
     user= models.ForeignKey(User,on_delete=models.CASCADE)
     product= models.ForeignKey(Products,on_delete=models.CASCADE)

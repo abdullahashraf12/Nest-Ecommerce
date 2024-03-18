@@ -1,8 +1,10 @@
 from django.contrib import admin
 from django.urls import include,path
-from core.views import index,product_list,category_list,category_product_list_view,show_vendor_list,vendor_details_view,get_product_by_id,get_products_name,AddToCardView,show_card,RemoveFromCardView,wishlist,AddToWishCardView,RemoveFromWishCardView
+from core.views import index,product_list,category_list,category_product_list_view,show_vendor_list,vendor_details_view,get_product_by_id,get_products_name,AddToCardView,show_card,RemoveFromCardView,wishlist,AddToWishCardView,RemoveFromWishCardView,AddReview
 app_name = "core"
 urlpatterns = [
+path("commentProduct/",AddReview.as_view(),name="commentProduct"),
+
 path("wishlist_Add/",AddToWishCardView.as_view(),name="wishlist_Add"),
 path('remove_from_wish/', RemoveFromWishCardView.as_view(), name='remove_from_wish'),
 
