@@ -20,6 +20,9 @@ def register_user(request):
             login(request, new_user)
             return redirect("core:index")
     else:
+        if request.user.is_authenticated:
+            return redirect("core:index")
+    
         print("GET Request")
         form = UserRegisterForms()
 
