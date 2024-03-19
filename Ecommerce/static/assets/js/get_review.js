@@ -440,7 +440,7 @@ function return_n_stars(number){
 
 }
 
-
+function myFunction(){
 $(document).ready(function() {
     // $(document).on("click", "button[name='submit_client_review']", function(event) {
         // event.preventDefault();
@@ -525,8 +525,9 @@ $(document).ready(function() {
             },
             error: function(xhr, textStatus, errorThrown) {
                 var errorResponse = JSON.parse(xhr.responseText);
-                // alert(errorResponse.error); // Log the specific error message
                 console.log(errorResponse)
+
+                // alert(errorResponse.error); // Log the specific error message
                 // $("#Add_To_Prod_Status").empty();
 
                 // $("#Add_To_Prod_Status").html('<div class="alert alert-danger" role="alert" style="margin-left: 800px; width: 500px;>Error Has Happened '+errorResponse+'!</div>');
@@ -543,6 +544,29 @@ $(document).ready(function() {
     
     
     
-    
+     
+        
     })
+}
 // })
+
+if (isMobile) {
+    // The client is accessing the website from a mobile device
+    try{
+    myFunction()
+    console.log("The client is using a mobile device.");
+
+    }catch(error){
+
+    }
+} else {
+    // The client is accessing the website from a non-mobile device
+    try{
+
+    setInterval(myFunction, 1000);
+    console.log("The client is not using a mobile device.");
+
+    }catch(error){
+
+    }
+}

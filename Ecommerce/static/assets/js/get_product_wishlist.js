@@ -82,5 +82,24 @@ function getCookie(name) {
     return cookieValue;
 }
 
+if (isMobile) {
+    // The client is accessing the website from a mobile device
+    try{
 
-setInterval(myFunction, 500);
+    myFunction()
+    console.log("The client is using a mobile device.");
+    }catch(error){
+
+    }
+} else {
+    // The client is accessing the website from a non-mobile device
+    try{
+
+    setInterval(myFunction, 1000);
+    console.log("The client is not using a mobile device.");
+}catch(error){
+        
+}
+    
+}
+

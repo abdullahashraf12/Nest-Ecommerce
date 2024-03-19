@@ -80,4 +80,25 @@ function getCookie(name) {
 }
 
 
-setInterval(myFunction, 500);
+
+// Check if the user agent string contains any mobile-related keywords
+
+if (isMobile) {
+    try{
+    myFunction()
+    console.log("The client is using a mobile device.");
+
+    }catch(error){
+
+    }
+    // The client is accessing the website from a mobile device
+} else {
+    try{
+
+    // The client is accessing the website from a non-mobile device
+    setInterval(myFunction, 1000);
+    console.log("The client is not using a mobile device.");
+}catch(error){
+
+}
+}
