@@ -9,7 +9,6 @@ from core.models import Products,Category,Vendor
 import json
 from django.middleware.csrf import get_token
 from mobApi.models import TestModel
-
 # Create your views here.
 class GetAllProducts(APIView):
     def get_all_products(self, request):
@@ -102,7 +101,6 @@ def get_csrf_token(request):
     return JsonResponse({'csrf_token': csrf_token})
 
 
-
 def submit_post(request):
     if request.method == 'POST':
         username = request.POST.get('username', None)
@@ -111,7 +109,8 @@ def submit_post(request):
             data = TestModel.objects.create(username=username)
             return JsonResponse({'name': data.username}, safe=False)
         else:
-            return JsonResponse({'error': 'Username not provided'}, status=400)
+            print(request.POST.get('username'))
+            return JsonResponse({'error': 'Username not provided',"username":request.POST.get('username')}, status=400)
     else:
         return JsonResponse({'error': 'Only POST requests are allowed'}, status=405)
 

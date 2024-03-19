@@ -195,22 +195,22 @@ function return_n_stars(number){
 </label>
 </div>
         
-<div  class="gold" style="float: left;">
+<div  class="silver" style="float: left;">
 <label>
 <input  type="radio" name="rating" style="visibility:hidden"/>
 </label>
 </div>
-<div  class="gold" style="float: left;">
+<div  class="silver" style="float: left;">
 <label>
 <input  type="radio" name="rating" style="visibility:hidden"/>
 </label>
 </div>
-<div  class="gold" style="float: left;">
+<div  class="silver" style="float: left;">
 <label>
 <input  type="radio" name="rating" style="visibility:hidden"/>
 </label>
 </div>
-<div  class="gold" style="float: left;">
+<div  class="silver" style="float: left;">
 <label>
 <input  type="radio" name="rating" style="visibility:hidden"/>
 </label>
@@ -239,7 +239,7 @@ function return_n_stars(number){
 <input  type="radio" name="rating" style="visibility:hidden"/>
 </label>
 </div>
-<div  class="gold" style="float: left;">
+<div  class="silver" style="float: left;">
 <label>
 <input  type="radio" name="rating" style="visibility:hidden"/>
 </label>
