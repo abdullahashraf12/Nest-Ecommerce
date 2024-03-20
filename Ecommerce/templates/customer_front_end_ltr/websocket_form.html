@@ -1,0 +1,39 @@
+
+        <form id="form">
+            <input type="text" name="message"/>
+        </form>
+    
+        <div id="messages"></div>
+        <script>
+            // Construct WebSocket URL using the window.location to get the current host
+            try {
+                let url = `ws://${window.location.hostname}:8080/ws/socket-server/`;
+                const chatsocket = new WebSocket(url);
+                
+                chatsocket.onmessage = function(e) {
+                    let data = JSON.parse(e.data);
+                    console.log('Data:', data);
+        
+                    if (data.type === 'chat') {
+                        let messages = document.getElementById('messages');
+        
+                        messages.insertAdjacentHTML('beforeend', `<div>
+                            <p>${data.message}</p>
+                        </div>`);
+                    }
+                };
+                alert("websocket established");
+    
+                let form = document.getElementById('form');
+                form.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    let message = e.target.message.value;
+                    chatsocket.send(JSON.stringify({
+                        'message': message
+                    }));
+                    form.reset();
+                });
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        </script>

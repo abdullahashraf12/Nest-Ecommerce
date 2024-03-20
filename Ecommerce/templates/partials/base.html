@@ -926,18 +926,42 @@
     <script src="{% static 'assets/js/star.js' %}"></script>
     <script src="{% static 'assets/js/add_client_review.js' %}"></script>
     <script src="{% static 'assets/js/get_review.js' %}"></script>
-    <script>
-        // Construct WebSocket URL using the window.location to get the current host
-        let url = `ws://${window.location.host}/ws/socket-server/`;
-        
-        const chatsocket = new WebSocket(url);
-        chatsocket.onmessage = function(e) {
-            let data = JSON.parse(e.data);
-            console.log(data);
-        };
-    </script>
-    
+    <script src="{% static 'assets/js/get_review.js' %}"></script>
 
+    
+    <!-- <script>
+        // Construct WebSocket URL using the window.location to get the current host
+        try{
+        let url = `ws://${window.location.host}/ws/socket-server/`;
+        const chatsocket = new WebSocket(url);
+        
+        chatsocket.onmessage = function(e){
+            let data = JSON.parse(e.data)
+            console.log('Data:', data)
+
+            if(data.type === 'chat'){
+                let messages = document.getElementById('messages')
+
+                messages.insertAdjacentHTML('beforeend', `<div>
+                                        <p>${data.message}</p>
+                                    </div>`)
+            }
+        }
+
+        let form = document.getElementById('form')
+        form.addEventListener('submit', (e)=> {
+            e.preventDefault()
+            let message = e.target.message.value 
+            chatsocket.send(JSON.stringify({
+                'message':message
+            }))
+            form.reset()
+        })
+    }catch(error){
+
+    }
+    </script> -->
+    
 </body>
 
 </html>
