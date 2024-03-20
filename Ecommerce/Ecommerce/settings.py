@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 import os
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -32,6 +31,7 @@ ALLOWED_HOSTS = ["*"]
 # Application definition
 
 INSTALLED_APPS = [
+    'channels',
     'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -44,6 +44,19 @@ INSTALLED_APPS = [
     'rest_framework',
     'mobApi'
 ]
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("*", 6379)],
+        },
+    },
+}
+# CHANNEL_LAYERS = {
+#     'default': {
+#         'BACKEND': 'channels.layers.InMemoryChannelLayer',  # Use InMemoryChannelLayer for development
+#     },
+# }
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -108,7 +121,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
+WSGI_APPLICATION ="Ecommerce.wsgi.application"
+ASGI_APPLICATION ="Ecommerce.asgi.application"
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 

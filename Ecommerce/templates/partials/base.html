@@ -926,6 +926,17 @@
     <script src="{% static 'assets/js/star.js' %}"></script>
     <script src="{% static 'assets/js/add_client_review.js' %}"></script>
     <script src="{% static 'assets/js/get_review.js' %}"></script>
+    <script>
+        // Construct WebSocket URL using the window.location to get the current host
+        let url = `ws://${window.location.host}/ws/socket-server/`;
+        
+        const chatsocket = new WebSocket(url);
+        chatsocket.onmessage = function(e) {
+            let data = JSON.parse(e.data);
+            console.log(data);
+        };
+    </script>
+    
 
 </body>
 

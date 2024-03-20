@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.urls import include,path
 from core.views import index,product_list,category_list,category_product_list_view,show_vendor_list,vendor_details_view,get_product_by_id,get_products_name,AddToCardView,show_card,RemoveFromCardView,wishlist,AddToWishCardView,RemoveFromWishCardView,AddReview
+from core.consumer import Consumer_chat
 app_name = "core"
 urlpatterns = [
 path("commentProduct/",AddReview.as_view(),name="commentProduct"),
@@ -26,4 +27,8 @@ path("category/<cid>/",category_product_list_view,name="category_product_list"),
 path('admin/', admin.site.urls),
 path("user/",include("userauths.urls"))
 
+]
+
+websocket_route=[
+ path("ws/socket-server/",Consumer_chat.as_asgi())   
 ]
