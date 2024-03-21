@@ -1,7 +1,7 @@
 from django.urls import path
 from userauths.views import *
 from core.views import *
-from mobApi.views import GetAllProducts,GetAllCategories,GetAllVendors,GetAllProductsName,GetAllVendorsName,GetAllCategoriesName, SearchProduct ,  get_csrf_token , submit_post,register_user_mob,login_user_mob,logout_mob
+from mobApi.views import GetAllProducts,GetAllCategories,GetAllVendors,GetAllProductsName,GetAllVendorsName,GetAllCategoriesName, SearchProduct ,  get_csrf_token , submit_post,register_user_mob,login_user_mob,logout_mob,get_p_n_c
 from mobApi.consumer import Authentication
 app_name = "mobApi"
 
@@ -22,6 +22,7 @@ path('submit_post/', submit_post, name='submit_post'),
 path('register_user_mob/', register_user_mob, name='register_user_mob'),
 path('login_user_mob/', login_user_mob, name='login_user_mob'),
 path('logout_mob/', logout_mob, name='login_user_mob'),
+path("get_p_n_c/",get_p_n_c,name="get_p_n_c"),
 
 # # Get Categories Bu ID
 # path("c_id/<pid>",get_product_by_id,name="get_products"),

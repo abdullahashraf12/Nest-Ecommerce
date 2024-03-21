@@ -151,3 +151,30 @@ def login_user_mob(request):
 def logout_mob(request):
     # logout(request)
     return JsonResponse({'data': "Success"}, safe=False)
+def get_p_n_c(request):
+    categ_name = request.GET.get('category_category')
+    prod_name = request.GET.get('search_name')
+    # print(categ_name)
+    # print(prod_name)
+    bananas = Products.objects.all().values()
+    vendors=Vendor.objects.all().values()
+    # tags = Tags.objects.all()
+    if(categ_name=="All Categories" or categ_name==""):
+        bananas = Products.objects.filter(products_status="published",title__icontains=prod_name).values()
+        print(categ_name)
+        print(prod_name)
+        print(bananas.count())
+        print("I am Here 1")
+
+    else:
+        bananas = Products.objects.filter(products_status="published",title__icontains=prod_name,category__cid=categ_name).values()
+        print(categ_name)
+        print(prod_name)
+        print(bananas.count())
+        print("I am Here 2")
+    context = {
+        "products":list(bananas),
+        "vendors":list(vendors),
+    }
+    return JsonResponse(context, safe=False)
+

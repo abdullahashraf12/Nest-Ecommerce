@@ -51,6 +51,9 @@ class Authentication(WebsocketConsumer):
                     'type': 'logout',
                     'error': 'Logout failed'
                 }))
+        elif action=="other":
+            data = input("Please Enter AnyThing")
+            self.send(text_data=json.dumps({"data":data}))
         else:
             message = text_data_json.get('message')
             async_to_sync(self.channel_layer.group_send)(
@@ -81,3 +84,4 @@ class Authentication(WebsocketConsumer):
         headers = {'X-CSRFToken': csrf_token, 'Cookie': f'csrftoken={csrf_token}'}
         response = requests.post(logout_url, headers=headers)
         return response.ok
+    
