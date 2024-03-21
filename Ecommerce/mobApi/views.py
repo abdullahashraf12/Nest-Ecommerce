@@ -9,6 +9,9 @@ from core.models import Products,Category,Vendor
 import json
 from django.middleware.csrf import get_token
 from mobApi.models import TestModel
+from django.contrib.auth import login, authenticate , logout
+from userauths.models import User
+
 # Create your views here.
 class GetAllProducts(APIView):
     def get_all_products(self, request):
@@ -117,3 +120,34 @@ def submit_post(request):
 
     # def post(self, request, *args, **kwargs):
     #     return self.add_to_card_post(request, *args, **kwargs)
+def register_user_mob(request):
+    if request.method == "POST":
+        username = request.POST.get("username")
+        email = request.POST.get("email")
+        password = request.POST.get("password")
+        model = User(username,email,password)
+        model.save()
+        new_user = authenticate(username=username,password=password)
+        login(request, new_user)
+        return JsonResponse({'data': "Sucess"}, safe=False)
+
+
+def login_user_mob(request):
+    if request.method == "POST":
+        email = request.POST.get("email")
+        password = request.POST.get("password")
+        try:
+            user = User.objects.get(email=email)
+        except:
+            return JsonResponse({'error': f"User with {email} does not exist "}, safe=False)
+        user = authenticate(request=request, email=email, password=password)
+        if user is not None:
+            # You may also generate and send CSRF token as part of response
+            login(request=request, user=user)
+            return JsonResponse({'data': "Success", "user": email}, safe=False)
+        else:
+            return JsonResponse({'error': f"Authentication failed for {email}"}, safe=False)
+
+def logout_mob(request):
+    # logout(request)
+    return JsonResponse({'data': "Success"}, safe=False)
