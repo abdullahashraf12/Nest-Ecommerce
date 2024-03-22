@@ -10,7 +10,8 @@ import json
 from django.middleware.csrf import get_token
 from mobApi.models import TestModel
 from django.contrib.auth import login, authenticate , logout
-from userauths.models import User
+from django.http import JsonResponse
+from userauths.models import User, UserToken
 
 # Create your views here.
 class GetAllProducts(APIView):
@@ -132,25 +133,52 @@ def register_user_mob(request):
         return JsonResponse({'data': "Sucess"}, safe=False)
 
 
+
 def login_user_mob(request):
     if request.method == "POST":
         email = request.POST.get("email")
         password = request.POST.get("password")
         try:
             user = User.objects.get(email=email)
-        except:
+        except User.DoesNotExist:
             return JsonResponse({'error': f"User with {email} does not exist "}, safe=False)
+        
         user = authenticate(request=request, email=email, password=password)
+        
         if user is not None:
-            # You may also generate and send CSRF token as part of response
-            login(request=request, user=user)
-            return JsonResponse({'data': "Success", "user": email}, safe=False)
+            # Log in the user
+            login(request, user)
+            
+            # Generate or get the user's token
+            user_token, created = UserToken.objects.get_or_create(user=user)
+            
+            # Return response with token
+            return JsonResponse({'data': "Success", 'user': email, 'token': user_token.token}, safe=False)
         else:
             return JsonResponse({'error': f"Authentication failed for {email}"}, safe=False)
+from userauths.models import UserToken
 
 def logout_mob(request):
-    # logout(request)
-    return JsonResponse({'data': "Success"}, safe=False)
+    if request.method == "POST":
+        # Retrieve the user's email from the request
+        email = request.POST.get("email")
+
+        try:
+            # Get the user instance
+            user = User.objects.get(email=email)
+            # Get the user's token
+            token = UserToken.objects.get(user=user)
+            # Delete the user's token
+            token.delete()
+            return JsonResponse({'data': "Success"}, safe=False)
+        except User.DoesNotExist:
+            return JsonResponse({'error': f"User with email {email} does not exist"}, status=400)
+        except UserToken.DoesNotExist:
+            return JsonResponse({'error': f"Token for user with email {email} does not exist"}, status=400)
+    else:
+        return JsonResponse({'error': 'Invalid request method'}, status=405)
+
+
 def get_p_n_c(request):
     categ_name = request.GET.get('category_category')
     prod_name = request.GET.get('search_name')
