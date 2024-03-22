@@ -118,7 +118,7 @@ class Authentication(WebsocketConsumer):
         else:
             return {'error': 'Authentication failed'}
 
-    def logout_user(self, csrf_token,username,email,password):
+    def logout_user(self, csrf_token,email):
         # Make logout POST request with CSRF token included as a cookie
         logout_url = 'http://192.168.1.9:8080/mobApi/logout_mob/'
         headers = {'X-CSRFToken': csrf_token, 'Cookie': f'csrftoken={csrf_token}'}
