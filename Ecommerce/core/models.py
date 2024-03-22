@@ -71,7 +71,7 @@ class Vendor(models.Model):
 
     user = models.ForeignKey(User,on_delete=models.SET_NULL,null=True)
     class Meta:
-        verbose_name_plural = "Category"
+        verbose_name_plural = "Vendor"
     
     def category_image(self):
         return mark_safe("<img src='/media/%s' width='50' height ='50'/>" % (self.image))
