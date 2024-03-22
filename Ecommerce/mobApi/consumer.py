@@ -77,9 +77,14 @@ class Authentication(WebsocketConsumer):
                     'type': 'logout',
                     'error': 'Logout failed'
                 }))
-        elif action=="other":
-            data = input("Please Enter AnyThing")
-            self.send(text_data=json.dumps({"data":data}))
+        elif action == 'register':
+            # Handle register action
+            username = text_data_json.get("username")
+            email = text_data_json.get('email')
+            password = text_data_json.get('password')
+            csrf_token = text_data_json.get('csrf_token')
+            register_response = self.register_user(email, username, password,  csrf_token)
+            self.send(text_data=json.dumps(register_response))
         else:
             message = text_data_json.get('message')
             async_to_sync(self.channel_layer.group_send)(
@@ -106,18 +111,25 @@ class Authentication(WebsocketConsumer):
     def authenticate_user(self, email, password,csrf_token):
         # Make authentication POST request with email and password
         headers = {'X-CSRFToken': csrf_token, 'Cookie': f'csrftoken={csrf_token}'}
-        authentication_url = 'http://192.168.1.11:8080/mobApi/login_user_mob/'
+        authentication_url = 'http://192.168.1.9:8080/mobApi/login_user_mob/'
         response = requests.post(authentication_url, data={'email': email, 'password': password}, headers=headers)
         if response.status_code == 200:
             return response.json()  # Assuming the response contains the user token
         else:
             return {'error': 'Authentication failed'}
 
-    def logout_user(self, csrf_token,email):
+    def logout_user(self, csrf_token,username,email,password):
         # Make logout POST request with CSRF token included as a cookie
-        logout_url = 'http://192.168.1.11:8080/mobApi/logout_mob/'
+        logout_url = 'http://192.168.1.9:8080/mobApi/logout_mob/'
         headers = {'X-CSRFToken': csrf_token, 'Cookie': f'csrftoken={csrf_token}'}
         
         response = requests.post(logout_url,data={"email":email}, headers=headers)
         return response.ok
-    
+    def register_user(self,  email, username, password,  csrf_token):
+        headers = {'X-CSRFToken': csrf_token, 'Cookie': f'csrftoken={csrf_token}'}
+        register_url = 'http://192.168.1.9:8080/mobApi/register_user_mob/'
+        response = requests.post(register_url, data={"username":username,'email': email, 'password': password}, headers=headers)
+        if response.status_code == 200:
+            return response.json()  # Assuming the response contains the user token
+        else:
+            return response.json()

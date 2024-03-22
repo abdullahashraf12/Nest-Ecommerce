@@ -121,19 +121,23 @@ def submit_post(request):
 
     # def post(self, request, *args, **kwargs):
     #     return self.add_to_card_post(request, *args, **kwargs)
+
 def register_user_mob(request):
     if request.method == "POST":
         username = request.POST.get("username")
         email = request.POST.get("email")
         password = request.POST.get("password")
-        model = User(username,email,password)
-        model.save()
-        new_user = authenticate(username=username,password=password)
-        login(request, new_user)
-        return JsonResponse({'data': "Sucess"}, safe=False)
 
-
-
+        # Check if the email is already in use
+        if User.objects.filter(email=email).exists():
+            return JsonResponse({'error': f"User with {email} already exists"}, status=400)
+        try:
+            User.objects.create_user(username=username, email=email, password=password)
+        
+            return JsonResponse({'data': "Success"}, safe=False)
+        except:
+            return JsonResponse({'error': 'Authentication failed'}, status=400)
+        
 def login_user_mob(request):
     if request.method == "POST":
         email = request.POST.get("email")
