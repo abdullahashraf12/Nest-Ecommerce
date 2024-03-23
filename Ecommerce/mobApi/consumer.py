@@ -111,7 +111,7 @@ class Authentication(WebsocketConsumer):
     def authenticate_user(self, email, password,csrf_token):
         # Make authentication POST request with email and password
         headers = {'X-CSRFToken': csrf_token, 'Cookie': f'csrftoken={csrf_token}'}
-        authentication_url = 'http://192.168.1.9:8080/mobApi/login_user_mob/'
+        authentication_url = 'http://192.168.1.7:8080/mobApi/login_user_mob/'
         response = requests.post(authentication_url, data={'email': email, 'password': password}, headers=headers)
         if response.status_code == 200:
             return response.json()  # Assuming the response contains the user token
@@ -120,14 +120,14 @@ class Authentication(WebsocketConsumer):
 
     def logout_user(self, csrf_token,email):
         # Make logout POST request with CSRF token included as a cookie
-        logout_url = 'http://192.168.1.9:8080/mobApi/logout_mob/'
+        logout_url = 'http://192.168.1.7:8080/mobApi/logout_mob/'
         headers = {'X-CSRFToken': csrf_token, 'Cookie': f'csrftoken={csrf_token}'}
         
         response = requests.post(logout_url,data={"email":email}, headers=headers)
         return response.ok
     def register_user(self,  email, username, password,  csrf_token):
         headers = {'X-CSRFToken': csrf_token, 'Cookie': f'csrftoken={csrf_token}'}
-        register_url = 'http://192.168.1.9:8080/mobApi/register_user_mob/'
+        register_url = 'http://192.168.1.7:8080/mobApi/register_user_mob/'
         response = requests.post(register_url, data={"username":username,'email': email, 'password': password}, headers=headers)
         if response.status_code == 200:
             return response.json()  # Assuming the response contains the user token
