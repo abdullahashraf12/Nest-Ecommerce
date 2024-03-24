@@ -2,7 +2,7 @@ from django.urls import path
 from userauths.views import *
 from core.views import *
 from mobApi.views import GetAllProducts,GetAllCategories,GetAllVendors,GetAllProductsName,GetAllVendorsName,GetAllCategoriesName, SearchProduct ,  get_csrf_token , submit_post,register_user_mob,login_user_mob,logout_mob,get_p_n_c
-from mobApi.consumer import Authentication
+from mobApi.consumer import Authentication, PushNotificationConsumer
 app_name = "mobApi"
 
 urlpatterns = [
@@ -36,5 +36,6 @@ path("get_p_n_c/",get_p_n_c,name="get_p_n_c"),
 ]
 
 websocket_route=[
- path("ws/socket-server/",Authentication.as_asgi())   
+ path("ws/socket-server/",Authentication.as_asgi()),
+ path("ws/socket-server/token/<str:user_token>", PushNotificationConsumer.as_asgi()),
 ]

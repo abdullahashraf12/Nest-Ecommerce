@@ -2,8 +2,15 @@ from channels.generic.websocket import WebsocketConsumer
 import json
 from asgiref.sync import async_to_sync
 import requests
+from mobApi.models import PushNotification
+from userauths.models import UserToken
+from channels.generic.websocket import WebsocketConsumer
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from channels.layers import get_channel_layer
 
 class Authentication(WebsocketConsumer):
+
     def connect(self):
         self.room_group_name = 'test'
 
@@ -133,3 +140,207 @@ class Authentication(WebsocketConsumer):
             return response.json()  # Assuming the response contains the user token
         else:
             return response.json()
+
+
+
+class PushNotificationConsumer(WebsocketConsumer):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.channel_layer = get_channel_layer()
+
+    def connect(self):
+        user_token = self.scope['url_route']['kwargs']['user_token']
+        user_token_exists = UserToken.objects.filter(token=user_token).exists()
+
+        if user_token_exists:
+            self.room_group_name = str(user_token)
+
+            async_to_sync(self.channel_layer.group_add)(
+                self.room_group_name,
+                self.channel_name
+            )
+            # Accept the connection
+            self.accept()
+            push_notifications = PushNotification.objects.filter(token_value=user_token)
+            print(list(push_notifications.values()))
+
+            if push_notifications.exists():
+                self.send(text_data=json.dumps(list(push_notifications.values())))
+
+        else:
+            # Reject the connection
+            self.close()
+
+    def receive(self, text_data):
+        pass
+
+    def send_notification(self, event):
+        message = event['message']
+        self.send(text_data=message)
+
+@receiver(post_save, sender=PushNotification)
+def push_notification_handler(sender, instance, created, **kwargs):
+    if created:
+        # data =  list(instance.objects.filter(token_value=instance.token_value).values())
+        # print(data);
+        # print(json.dumps(list(instance.values())))
+        user_token = instance.token_value
+        dict = {
+            'id':instance.id,
+            'message':instance.message
+        }
+        group_name = str(user_token)
+        async_to_sync(get_channel_layer().group_send)(
+            group_name,
+            {
+                'type': 'send_notification',
+                'message': json.dumps(dict)
+            }
+        )
+
+
+
+
+
+
+# class PushNotificationClass(WebsocketConsumer):
+#     def connect(self):
+#         user_token = self.scope['url_route']['kwargs']['user_token']
+#         user_token_exists = UserToken.objects.filter(token=user_token).exists()
+
+#         if user_token_exists:
+#             self.room_group_name = str(user_token)
+
+#             async_to_sync(self.channel_layer.group_add)(
+#                 self.room_group_name,
+#                 self.channel_name
+#             )
+#             # Accept the connection
+#             self.accept()
+#             push_notifications = PushNotification.objects.filter(token_value=user_token)
+#             print(list(push_notifications.values()))
+
+#             if push_notifications.exists():
+#                 self.send(text_data=json.dumps(list(push_notifications.values())))
+
+#         else:
+#             # Reject the connection
+#             self.close()
+
+#     def receive(self, text_data):
+#         pass
+
+
+# @receiver(post_save, sender=PushNotification)
+# def push_notification_handler(sender, instance, created, **kwargs):
+#     if created:
+#         user_token = instance.token_value
+#         group_name = str(user_token)
+#         async_to_sync(PushNotificationClass.channel_layer.group_send)(
+            
+#             group_name,
+#             {
+#                 'type': 'send_notification',
+#                 'message': json.dumps(instance.to_dict())
+#             }
+#         )
+
+
+# class PushNotificationClass(WebsocketConsumer):
+#     def connect(self):
+#         user_token = self.scope['url_route']['kwargs']['user_token']
+#         user_token_exists = UserToken.objects.filter(token=user_token).exists()
+
+#         if user_token_exists:
+#             self.room_group_name = str(user_token)
+
+#             async_to_sync(self.channel_layer.group_add)(
+#                 self.room_group_name,
+#                 self.channel_name
+#             )
+#             # Accept the connection
+#             self.accept()
+#             push_notifications = PushNotification.objects.filter(token_value=user_token)
+#             print(list(push_notifications.values()))
+
+#             if push_notifications.exists():
+#                 self.send(text_data=json.dumps(list(push_notifications.values())))
+
+#         else:
+#             # Reject the connection
+#             self.close()
+
+#     def receive(self, text_data):
+#         pass
+
+#     def send_notification(self, event):
+#         message = event['message']
+#         self.send(text_data=message)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# class PushNotificationClass(WebsocketConsumer):
+#     def connect(self):
+#         user_token = self.scope['url_route']['kwargs']['user_token']
+#         user_token_exists = UserToken.objects.filter(token=user_token).exists()
+
+       
+#         if user_token_exists:
+#             user_token_obj = UserToken.objects.filter(token=user_token).first()
+#             self.room_group_name = str(user_token)
+
+#             async_to_sync(self.channel_layer.group_add)(
+#                 self.room_group_name,
+#                 self.channel_name
+#             )
+#             # Accept the connection
+#             self.accept()
+#             push_notifications = PushNotification.objects.filter(token_value=user_token)
+
+#             print(list(push_notifications.values()))
+
+#             if push_notifications.exists():
+#                 self.send(text_data=json.dumps(list(push_notifications.values())));            
+
+#         else:
+#             # Reject the connection
+#             self.close()
+#     def receive(self, text_data):        
+#         pass
+
+    
+

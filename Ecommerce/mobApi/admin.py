@@ -1,8 +1,13 @@
 from django.contrib import admin
-from mobApi.models import TestModel
-# Register your models here.
+from .models import TestModel, PushNotification
+
 class TestModelAdmin(admin.ModelAdmin):
     search_fields = ['username']
-    list_display= ["username"]
+    list_display = ["username"]
 
-admin.site.register(TestModel,TestModelAdmin)
+class PushNotificationAdmin(admin.ModelAdmin):
+    search_fields = ['token_value']  # Searching by username
+    list_display = [ "message","token_value"]
+
+admin.site.register(TestModel, TestModelAdmin)
+admin.site.register(PushNotification, PushNotificationAdmin)

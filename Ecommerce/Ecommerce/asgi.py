@@ -13,12 +13,21 @@ from django.core.asgi import get_asgi_application
 from channels.auth import AuthMiddlewareStack
 from channels.routing import ProtocolTypeRouter,URLRouter
 from django.core.asgi import get_asgi_application
-import mobApi.urls 
+from mobApi.urls import websocket_route
+from channels.routing import ProtocolTypeRouter, URLRouter
+
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Ecommerce.settings')
 
+# application = ProtocolTypeRouter({
+#     "http":get_asgi_application(),
+#     "websocket":AuthMiddlewareStack(
+#         URLRouter(mobApi.urls.websocket_route)
+#     )
+# })
+
 application = ProtocolTypeRouter({
-    "http":get_asgi_application(),
-    "websocket":AuthMiddlewareStack(
-        URLRouter(mobApi.urls.websocket_route)
-    )
+    "http": get_asgi_application(),
+    "websocket": URLRouter(
+        websocket_route
+    ),
 })
