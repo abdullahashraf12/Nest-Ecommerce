@@ -149,6 +149,7 @@ class PushNotificationConsumer(WebsocketConsumer):
         self.channel_layer = get_channel_layer()
 
     def connect(self):
+        #         headers = self.scope['headers']
         user_token = self.scope['url_route']['kwargs']['user_token']
         user_token_exists = UserToken.objects.filter(token=user_token).exists()
 
