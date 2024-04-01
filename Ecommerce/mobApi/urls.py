@@ -37,5 +37,5 @@ path("get_p_n_c/",get_p_n_c,name="get_p_n_c"),
 
 websocket_route=[
  path("ws/socket-server/",Authentication.as_asgi()),
- path("ws/socket-server/token/<str:user_token>", PushNotificationConsumer.as_asgi()),
+ path("ws/socket-server/token", PushNotificationConsumer.as_asgi()),
 ]
