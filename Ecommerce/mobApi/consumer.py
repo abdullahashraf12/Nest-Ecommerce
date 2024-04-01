@@ -13,7 +13,6 @@ class Authentication(WebsocketConsumer):
 
     def connect(self):
         self.room_group_name = 'test'
-
         async_to_sync(self.channel_layer.group_add)(
             self.room_group_name,
             self.channel_name
@@ -41,30 +40,6 @@ class Authentication(WebsocketConsumer):
                     'type': 'authentication',
                     'error': 'Authentication failed'
                 }))
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-            # Perform authentication via POST request with CSRF token
-            # auth_response = self.authenticate_user(email, password, csrf_token)
-            # if auth_response:
-            #     self.send(text_data=json.dumps({
-            #         'type': 'authentication',
-            #         'message': 'Authentication successful'
-            #     }))
-            # else:
-            #     self.send(text_data=json.dumps({
-            #         'type': 'authentication',
-            #         'error': 'Authentication failed'
-            #     }))
         elif action == 'logout':
             email = text_data_json.get('email')
 
@@ -109,12 +84,6 @@ class Authentication(WebsocketConsumer):
             'message': message
         }))
 
-    # def authenticate_user(self, email, password, csrf_token):
-    #     # Make authentication POST request with CSRF token included as a cookie
-    #     authentication_url = 'http://192.168.1.11:8080/mobApi/login_user_mob/'
-    #     headers = {'X-CSRFToken': csrf_token, 'Cookie': f'csrftoken={csrf_token}'}
-    #     response = requests.post(authentication_url, data={'email': email, 'password': password}, headers=headers)
-    #     return response.ok
     def authenticate_user(self, email, password,csrf_token):
         # Make authentication POST request with email and password
         headers = {'X-CSRFToken': csrf_token, 'Cookie': f'csrftoken={csrf_token}'}
@@ -153,7 +122,6 @@ class PushNotificationConsumer(WebsocketConsumer):
         print("headers"+str(headers))
         token = None
 
-# Iterate through headers
         for header in headers:
             # Check if header key is 'token'
             if header[0] == b'token':
@@ -161,7 +129,6 @@ class PushNotificationConsumer(WebsocketConsumer):
                 token = header[1]
                 break
 
-        # user_token = self.scope['url_route']['kwargs']['user_token']
         user_token = token.decode('utf-8')
         user_token_exists = UserToken.objects.filter(token=user_token).exists()
 
@@ -202,9 +169,7 @@ class PushNotificationConsumer(WebsocketConsumer):
 @receiver(post_save, sender=PushNotification)
 def push_notification_handler(sender, instance, created, **kwargs):
     if created:
-        # data =  list(instance.objects.filter(token_value=instance.token_value).values())
-        # print(data);
-        # print(json.dumps(list(instance.values())))
+
         user_token = instance.token_value
         dict = {
             'id':instance.id,
