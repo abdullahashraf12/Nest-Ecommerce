@@ -2,8 +2,8 @@ from channels.generic.websocket import WebsocketConsumer
 import json
 from asgiref.sync import async_to_sync
 import requests
-from mobApi.models import PushNotification
-from userauths.models import UserToken
+from mobApi.models import PushNotification,UserLocation
+from userauths.models import UserToken , User
 from channels.generic.websocket import WebsocketConsumer
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -87,7 +87,7 @@ class Authentication(WebsocketConsumer):
     def authenticate_user(self, email, password,csrf_token):
         # Make authentication POST request with email and password
         headers = {'X-CSRFToken': csrf_token, 'Cookie': f'csrftoken={csrf_token}'}
-        authentication_url = 'http://192.168.1.8:8080/mobApi/login_user_mob/'
+        authentication_url = 'http://192.168.1.5:8080/mobApi/login_user_mob/'
         response = requests.post(authentication_url, data={'email': email, 'password': password}, headers=headers)
         if response.status_code == 200:
             return response.json()  # Assuming the response contains the user token
@@ -96,14 +96,14 @@ class Authentication(WebsocketConsumer):
 
     def logout_user(self, csrf_token,email):
         # Make logout POST request with CSRF token included as a cookie
-        logout_url = 'http://192.168.1.8:8080/mobApi/logout_mob/'
+        logout_url = 'http://192.168.1.5:8080/mobApi/logout_mob/'
         headers = {'X-CSRFToken': csrf_token, 'Cookie': f'csrftoken={csrf_token}'}
         
         response = requests.post(logout_url,data={"email":email}, headers=headers)
         return response.ok
     def register_user(self,  email, username, password,  csrf_token):
         headers = {'X-CSRFToken': csrf_token, 'Cookie': f'csrftoken={csrf_token}'}
-        register_url = 'http://192.168.1.8:8080/mobApi/register_user_mob/'
+        register_url = 'http://192.168.1.5:8080/mobApi/register_user_mob/'
         response = requests.post(register_url, data={"username":username,'email': email, 'password': password}, headers=headers)
         if response.status_code == 200:
             return response.json()  # Assuming the response contains the user token
@@ -142,7 +142,7 @@ class PushNotificationConsumer(WebsocketConsumer):
             # Accept the connection
             self.accept()
             push_notifications = PushNotification.objects.filter(token_value=user_token)
-            print(list(push_notifications.values()))
+
 
             if push_notifications.exists():
                 self.send(text_data=json.dumps(list(push_notifications.values())))
@@ -156,11 +156,35 @@ class PushNotificationConsumer(WebsocketConsumer):
         print(text_data)
         data_dict = json.loads(text_data)
         token=str(data_dict["token"])
-        notification_id = int(data_dict["id"])
-        print(notification_id)
-        print(token)
-        PushNotification.objects.filter(token_value=token, id=notification_id).delete()
-        print("Data Has Been Deleted")
+
+        if(data_dict["data"] == "delete"):
+            notification_id = int(data_dict["id"])
+            print(notification_id)
+            print(token)
+            PushNotification.objects.filter(token_value=token, id=notification_id).delete()
+            print("Data Has Been Deleted")
+        elif data_dict["data"] == "GPS_Data":
+            try:
+                user_tok = UserToken.objects.get(token=token)
+                username = user_tok.user
+                # Check if a record exists for the user
+                if UserLocation.objects.filter(user=username).exists():
+                    # If a record exists, update it
+                    user_location = UserLocation.objects.get(user=username)
+                    user_location.Latitude = data_dict["latitude"]
+                    user_location.Longtitude = data_dict["longitude"]
+                    user_location.save()
+                else:
+                    # If no record exists, create a new one
+                    user_location = UserLocation()
+                    user_location.user= username
+                    user_location.Latitude = data_dict["latitude"]
+                    user_location.Longtitude = data_dict["longitude"]
+                    user_location.save()
+            except UserToken.DoesNotExist:
+                # Handle the case where the token does not exist
+                # Log an error or take appropriate action
+                pass
 
     def send_notification(self, event):
         message = event['message']

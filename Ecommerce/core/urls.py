@@ -26,6 +26,5 @@ path("category/",category_list,name="category_list"),
 path("category/<cid>/",category_product_list_view,name="category_product_list"),
 path('admin/', admin.site.urls),
 path("user/",include("userauths.urls"))
-
 ]
 

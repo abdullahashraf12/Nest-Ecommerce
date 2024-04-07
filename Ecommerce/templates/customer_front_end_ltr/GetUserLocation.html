@@ -1,0 +1,43 @@
+<html>
+    {% load static %}
+<head>
+    <title>User Location</title>
+    <link rel="stylesheet" href="{% static 'assets/css/leaflet.css' %}"/>
+    <script src="{% static 'assets/js/leaflet.js' %}" ></script>
+</head>
+<body>
+
+<div id="map" style="height: 100%; width: 100%;"></div>
+<div>
+    <input id="lat" value="{{ latitude }}" hidden>
+    <input id="lon" value="{{ longitude }}" hidden>
+</div>
+<script>
+function initialize(latitude, longitude){
+    var map = L.map('map').setView([latitude, longitude], 13);
+
+    var googleStreets = L.tileLayer('https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',{
+        maxZoom: 20,
+        subdomains:['mt0','mt1','mt2','mt3']
+    });
+
+    googleStreets.addTo(map);
+
+    L.marker([latitude, longitude]).addTo(map)
+        .bindPopup('User Location:<br> Latitude: ' + latitude + '<br> Longitude: ' + longitude)
+        .openPopup();
+}
+// This block gets executed when the page is loaded
+document.addEventListener("DOMContentLoaded", function() {
+    
+    // Fetch latitude and longitude values from the input fields
+    var latitude = parseFloat(document.getElementById("lat").value);
+    var longitude = parseFloat(document.getElementById("lon").value);
+    
+    // Call the initialize function with latitude and longitude values
+    initialize(latitude, longitude);
+});
+</script>
+
+</body>
+</html>

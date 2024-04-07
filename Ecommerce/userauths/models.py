@@ -16,7 +16,7 @@ class User(AbstractUser):
         return self.username
 
 class UserToken(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE,related_name="user")
     token = models.CharField(max_length=64, unique=True)
 
     def save(self, *args, **kwargs):

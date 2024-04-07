@@ -523,3 +523,7 @@ def wishlist(request):
 #         return Response(context)
 def message_socket(request):
     return render(request=request,template_name="customer_front_end_ltr/websocket_form.html")
+
+
+
+

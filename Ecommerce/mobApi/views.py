@@ -210,3 +210,11 @@ def get_p_n_c(request):
     }
     return JsonResponse(context, safe=False)
 
+
+
+def user_location(request, latitude, longitude):
+    context = {
+        'latitude': latitude,
+        'longitude': longitude
+    }
+    return render(request=request,template_name="customer_front_end_ltr/GetUserLocation.html",context=context)
